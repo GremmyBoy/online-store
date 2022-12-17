@@ -1,8 +1,8 @@
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const mode = process.env.NODE_ENV || 'development';
 
@@ -34,7 +34,17 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
-        })
+        }),
+        new CopyPlugin({
+          patterns: [
+            {
+              from: '**/*',
+              context: path.resolve(__dirname, 'src', 'assets'),
+              to: './assets',
+              noErrorOnMissing: true,
+            },
+          ],
+        }),
     ],
     module: {
         rules: [
@@ -47,8 +57,12 @@ module.exports = {
             use: 'ts-loader',
           },
           {
+            test: /\.(svg|png|jpg)$/i, 
+            type: 'asset/resource'
+          },
+          {
             test: /\.(c|sa|sc)ss$/i,
-            use: [devMode ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+            use: [devMode ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader"],
           },
           {
             test: /\.m?js$/,
