@@ -28,6 +28,9 @@ module.exports = {
         filename: 'index.[contenthash].js',
         assetModuleFilename: 'assets/[name][ext]'
     },
+    resolve: {
+      extensions: ['.ts', '.js'],
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html')
