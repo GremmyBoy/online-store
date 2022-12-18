@@ -1,4 +1,4 @@
-{
+export const base = {
     "products": [
     {
     "id": 1,
