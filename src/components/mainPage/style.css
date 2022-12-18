@@ -6,7 +6,7 @@ main {
 .goods__conteiner {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     width: 65%;
     padding: 20px;
 }
@@ -14,12 +14,13 @@ main {
 .card {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 20px;
 
-    width: 23%;
+    width: 24%;
     height: 350px;
+    padding: 10px;
 
     border: 1px solid black;
     border-radius: 5px;
@@ -28,7 +29,7 @@ main {
 
 .card__image {
     max-width: 90%;
-    height: 170px;
+    height: 160px;
 }
 
 .card__description {
