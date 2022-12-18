@@ -21,8 +21,20 @@ export const createSorting = () => {
     const sorting = document.createElement('div');
     sorting.classList.add('sorting__conteiner');
     main?.append(sorting);
-    // TODO: add sorting content
-    sorting.textContent = 'sorting';
+
+    const sortBlock = document.createElement('div');
+    sortBlock.classList.add('sort__block');
+    sorting.append(sortBlock);
+
+    for (let i = 0; i < 2; i++) {
+        const sortButton = document.createElement('button');
+        sortButton.classList.add('sort__button');
+        sortBlock.append(sortButton);
+    }
+
+    const sortButtons = document.querySelectorAll('.sort__button');
+    sortButtons[0].innerHTML = 'Price ascending';
+    sortButtons[1].innerHTML = 'Price descending'
 }
 
 export const createGoodsCards = (base: product[]) => {
