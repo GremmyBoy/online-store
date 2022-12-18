@@ -1,0 +1,89 @@
+/* basic styles */
+
+body {
+    background-color: rgba(217, 195, 31, 0.464);
+}
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1400px;
+}
+
+/* header */
+
+.header {
+    border-bottom: 2px solid orangered;
+    border-radius: 15px;
+    padding-bottom: 5px;
+}
+
+.header-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo h1 {
+    text-transform: uppercase;
+    color: rgb(181, 44, 44);
+    font-family: 'Italianno';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 20px;
+}
+
+.header-count p {
+    font-family: 'Italianno';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+    color: orange;
+}
+
+
+/* main */
+
+main {
+    flex: 1 1 auto;
+}
+
+/* footer */
+
+.footer {
+    border-top: 2px solid orangered;
+    border-radius: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-logo h2 {
+    font-family: 'Italianno';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
+    color: orange;
+}
+
+.rs-logo img {
+    width: 100px;
+    height: 50px;
+}
+
+.git-logo img {
+    width: 80px;
+}
