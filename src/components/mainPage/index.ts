@@ -1,6 +1,5 @@
 import './../../libs/reset.css';
 import './style.css';
-import { base } from '../goodsBase';
 
 interface product {
         id: number;
@@ -16,22 +15,36 @@ interface product {
         images: string[];
 }
 
-export const createGoodsCards = () => {
-console.log('createGoodsCards');
-    const main = document.querySelector('main');
+const main = document.querySelector('main');
+
+export const createSorting = () => {
     const sorting = document.createElement('div');
     sorting.classList.add('sorting__conteiner');
     main?.append(sorting);
     // TODO: add sorting content
     sorting.textContent = 'sorting';
+}
 
-    const goodsConteiner: HTMLDivElement = document.createElement('div');
-    goodsConteiner.classList.add('goods__conteiner');
-    main?.append(goodsConteiner);
+export const createGoodsCards = (base: product[]) => {
+console.log('createGoodsCards');
+    let goodsConteiner: HTMLDivElement;
+    if (document.querySelector('.goods__conteiner')) {
+        goodsConteiner = document.querySelector('.goods__conteiner')!;
+        document.querySelector('.goods__conteiner')!.innerHTML = '';
+    } else {
+        goodsConteiner = document.createElement('div');
+        goodsConteiner.classList.add('goods__conteiner');
+        main?.append(goodsConteiner);
+    }
 
-    base.products.forEach((product: product) => {
+    base.forEach((product: product) => {
         const card = document.createElement('div');
         card.classList.add('card');
+        card.addEventListener('click', (e) => {
+            if (!(e.target as HTMLElement).classList.contains('btn')) {
+                console.log(`click to product ${product.id} `)
+            }
+        })
         goodsConteiner.append(card);
 
         const image = document.createElement('img');

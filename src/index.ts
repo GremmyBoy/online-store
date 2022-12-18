@@ -1,8 +1,8 @@
-import "./index.html";
 import "./index.css";
-import { createGoodsCards } from './components/mainPage/index';
+import { createSorting , createGoodsCards } from './components/mainPage/index';
+import { base } from './components/goodsBase';
 
 window.onload = function() {
-    console.log('window.onload'); 
-    createGoodsCards();
+    createSorting();
+    createGoodsCards(base.products);
 }
