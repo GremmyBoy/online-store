@@ -1,5 +1,6 @@
 import './../../libs/reset.css';
 import './style.css';
+import { base } from '../goodsBase';
 
 interface product {
         id: number;
@@ -16,6 +17,15 @@ interface product {
 }
 
 const main = document.querySelector('main');
+const sortUp = base.products.slice().sort(
+    (a: any, b: any) => 
+        a['price'] - b['price']
+    )
+
+const sortDown = base.products.slice().sort(
+    (a: any, b: any) => 
+        b['price'] - a['price']
+    )
 
 export const createSorting = () => {
     const sorting = document.createElement('div');
@@ -34,7 +44,13 @@ export const createSorting = () => {
 
     const sortButtons = document.querySelectorAll('.sort__button');
     sortButtons[0].innerHTML = 'Price ascending';
-    sortButtons[1].innerHTML = 'Price descending'
+    sortButtons[0].addEventListener('click', () => {
+        return createGoodsCards(sortUp);
+    })
+    sortButtons[1].innerHTML = 'Price descending';
+    sortButtons[1].addEventListener('click', () => {
+        return createGoodsCards(sortDown);
+    })
 }
 
 export const createGoodsCards = (base: product[]) => {
@@ -96,3 +112,13 @@ console.log('createGoodsCards');
 
     })
 }
+
+
+
+
+
+
+
+
+
+
