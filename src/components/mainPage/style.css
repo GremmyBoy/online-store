@@ -3,6 +3,32 @@ main {
     justify-content: space-between;
 }
 
+.sorting__conteiner {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    padding-top: 20px;
+}
+
+.sort__block {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.sort__button {
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #F1F3F2;
+}
+
+.sort__button:hover {
+    scale: 1.1;
+}
+
 .goods__conteiner {
     display: flex;
     flex-wrap: wrap;

@@ -1,7 +1,8 @@
 import './../../libs/reset.css';
 import './style.css';
+import { base } from '../goodsBase';
 
-interface product {
+export interface product {
         id: number;
         title: string;
         description: string;
@@ -17,12 +18,45 @@ interface product {
 
 const main = document.querySelector('main');
 
+const sortFunctionUp = (arr: product[], item: string) => {
+    return arr.slice().sort(
+    (a: any, b: any) => 
+        a[item] - b[item]
+    )
+}
+
+const sortFunctionDown = (arr: product[], item: string) => {
+    return arr.slice().sort(
+    (a: any, b: any) => 
+        b[item] - a[item]
+    )
+}
+
 export const createSorting = () => {
     const sorting = document.createElement('div');
     sorting.classList.add('sorting__conteiner');
     main?.append(sorting);
-    // TODO: add sorting content
-    sorting.textContent = 'sorting';
+
+    const sortBlock = document.createElement('div');
+    sortBlock.classList.add('sort__block');
+    sorting.append(sortBlock);
+
+    for (let i = 0; i < 2; i++) {
+        const sortButton = document.createElement('button');
+        sortButton.classList.add('sort__button');
+        sortBlock.append(sortButton);
+    }
+
+    const sortButtons = document.querySelectorAll('.sort__button');
+    sortButtons[0].classList.add('up__btn');
+    sortButtons[0].innerHTML = 'Price ascending';
+    sortButtons[0].addEventListener('click', (e) => {
+        return createGoodsCards(sortFunctionUp(base.products, 'price'));
+    })
+    sortButtons[1].innerHTML = 'Price descending';
+    sortButtons[1].addEventListener('click', (e) => {
+        return createGoodsCards(sortFunctionDown(base.products, 'price'));
+    })
 }
 
 export const createGoodsCards = (base: product[]) => {
@@ -84,3 +118,17 @@ console.log('createGoodsCards');
 
     })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
