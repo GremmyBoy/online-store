@@ -3,6 +3,7 @@ main {
     justify-content: space-between;
 }
 
+/* Styles for sorting block */
 .sorting__conteiner {
     display: flex;
     flex-direction: column;
@@ -29,6 +30,7 @@ main {
     scale: 1.1;
 }
 
+/* Styles fo goods block */
 .goods__conteiner {
     display: flex;
     flex-wrap: wrap;
@@ -84,4 +86,76 @@ main {
 
 .btn:hover {
     transform: scale(1.1);
+}
+
+/* Styles for filter block */
+
+.filter__block {
+    margin-top: 20px;
+}
+
+/* Styles for category block */
+.category__block h2 {
+    text-align: center;
+    padding: 2px;
+    border-bottom: 1px solid orange;
+    /* background-color: #181a1c; */
+}
+
+.category__block {
+    padding: 2px;
+    border: 1px solid orange;
+    border-radius: 0.5rem;
+    margin-bottom: 5%;
+    text-transform: uppercase;
+    
+    overflow: hidden;
+}
+
+.category__list {
+    padding: 6px;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 10rem;
+}
+
+.category__list input {
+    cursor: grab;
+}
+
+.category__list label {
+    padding: 0.3rem;
+}
+
+/* Styles for brand block */
+.brand__block h2 {
+    text-align: center;
+    padding: 2px;
+    border-bottom: 1px solid orange;
+    /* background-color: #181a1c; */
+}
+
+.brand__block {
+    padding: 2px;
+    border: 1px solid orange;
+    border-radius: 0.5rem;
+    margin-bottom: 5%;
+    text-transform: uppercase;
+    
+    overflow: hidden;
+}
+
+.brand__list {
+    padding: 6px;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 10rem;
+}
+
+.brand__list input {
+    cursor: grab;
+}
+
+.brand__list label {
+    padding: 0.3rem;
 }

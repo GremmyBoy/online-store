@@ -32,6 +32,28 @@ const sortFunctionDown = (arr: product[], item: string) => {
     )
 }
 
+export const categoryFilter = (base: product[]) => {
+    let arr: any = [];
+    base.forEach((product: product) => {
+        arr.push(product.category);
+    });
+    let categorySet = new Set(arr);
+    console.log([...categorySet]);
+    return [...categorySet];
+}
+
+export const brandFilter = (base: product[]) => {
+    let arr: any = [];
+    base.forEach((product: product) => {
+        arr.push(product.brand);
+    });
+    let brandSet = new Set(arr);
+    console.log([...brandSet]);
+    return [...brandSet];
+}
+
+// add filter and sorting
+
 export const createSorting = () => {
     const sorting = document.createElement('div');
     sorting.classList.add('sorting__conteiner');
@@ -48,7 +70,6 @@ export const createSorting = () => {
     }
 
     const sortButtons = document.querySelectorAll('.sort__button');
-    sortButtons[0].classList.add('up__btn');
     sortButtons[0].innerHTML = 'Price ascending';
     sortButtons[0].addEventListener('click', (e) => {
         return createGoodsCards(sortFunctionUp(base.products, 'price'));
@@ -57,7 +78,72 @@ export const createSorting = () => {
     sortButtons[1].addEventListener('click', (e) => {
         return createGoodsCards(sortFunctionDown(base.products, 'price'));
     })
+
+    // Create filter block
+
+    const filterBlock = document.createElement('div');
+    filterBlock.classList.add('filter__block');
+    sorting.append(filterBlock);
+    // addEvent INPUT for filterblock
+    
+    // create Category list
+
+    const categoryBlock = document.createElement('div');
+    categoryBlock.classList.add('category__block');
+    filterBlock.append(categoryBlock);
+
+    const categoryTitle = document.createElement('h2');
+    categoryBlock.append(categoryTitle);
+    categoryTitle.innerHTML = 'Category';
+
+    const categoryList = document.createElement('div');
+    categoryList.classList.add('category__list');
+    categoryBlock.append(categoryList);
+    categoryFilter(base.products).forEach((item) => {
+        const categoryItem = document.createElement('div');
+        categoryItem.classList.add('category__item');
+        categoryList.append(categoryItem);
+
+        const categoryInput = document.createElement('input');
+        categoryInput.setAttribute('type', 'checkbox');
+        categoryInput.setAttribute('id', `${item}`);
+        categoryList.append(categoryInput);
+
+        const categoryLabel = document.createElement('label');
+        categoryLabel.setAttribute('for', `${item}`)
+        categoryLabel.textContent = `${item}`;
+        categoryList.append(categoryLabel);
+    })
+
+    const brandBlock = document.createElement('div');
+    brandBlock.classList.add('brand__block');
+    filterBlock.append(brandBlock);
+
+    const brandTitle = document.createElement('h2');
+    brandBlock.append(brandTitle);
+    brandTitle.innerHTML = 'Brand';
+
+    const brandList = document.createElement('div');
+    brandList.classList.add('brand__list');
+    brandBlock.append(brandList);
+    brandFilter(base.products).forEach((item) => {
+        const brandItem = document.createElement('div');
+        brandItem.classList.add('brand__item');
+        brandList.append(brandItem);
+
+        const brandInput = document.createElement('input');
+        brandInput.setAttribute('type', 'checkbox');
+        brandInput.setAttribute('id', `${item}`);
+        brandList.append(brandInput);
+
+        const brandLabel = document.createElement('label');
+        brandLabel.setAttribute('for', `${item}`);
+        brandLabel.textContent = `${item}`;
+        brandList.append(brandLabel);
+    })
 }
+
+// create cards
 
 export const createGoodsCards = (base: product[]) => {
 console.log('createGoodsCards');
@@ -118,6 +204,9 @@ console.log('createGoodsCards');
 
     })
 }
+
+
+
 
 
 
