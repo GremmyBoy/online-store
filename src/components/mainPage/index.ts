@@ -115,6 +115,8 @@ export const createSorting = () => {
         categoryList.append(categoryLabel);
     })
 
+    // Create brand block
+
     const brandBlock = document.createElement('div');
     brandBlock.classList.add('brand__block');
     filterBlock.append(brandBlock);
@@ -141,6 +143,48 @@ export const createSorting = () => {
         brandLabel.textContent = `${item}`;
         brandList.append(brandLabel);
     })
+
+    // create price block
+
+    const priceBlock = document.createElement('div');
+    priceBlock.classList.add('price__block');
+    filterBlock.append(priceBlock);
+    
+    const priceTitle = document.createElement('h2');
+    priceTitle.innerHTML = 'Price';
+    priceBlock.append(priceTitle);
+
+    const priceFormBlock = document.createElement('div');
+    priceFormBlock.classList.add('price__form-block');
+    priceBlock.append(priceFormBlock);
+
+    for(let i = 0; i < 2; i++){
+        const priceInput = document.createElement('input');
+        priceInput.setAttribute('type', 'number');
+        priceInput.classList.add('price__input');
+        priceFormBlock.append(priceInput);
+    }
+
+    // create stock block
+
+    const stockBlock = document.createElement('div');
+    stockBlock.classList.add('stock__block');
+    filterBlock.append(stockBlock);
+    
+    const stockTitle = document.createElement('h2');
+    stockTitle.innerHTML = 'Stock';
+    stockBlock.append(stockTitle);
+
+    const stockFormBlock = document.createElement('div');
+    stockFormBlock.classList.add('stock__form-block');
+    stockBlock.append(stockFormBlock);
+
+    for(let i = 0; i < 2; i++){
+        const stockInput = document.createElement('input');
+        stockInput.setAttribute('type', 'number');
+        stockInput.classList.add('stock__input');
+        stockFormBlock.append(stockInput);
+    }
 }
 
 // create cards
