@@ -1,7 +1,8 @@
 import "./index.css";
 import { createSorting , createGoodsCards } from './components/mainPage/index';
 import { base } from './components/goodsBase';
-import { create404 } from './components/error/404'
+import { create404 } from './components/error/404';
+import { cart } from './components/cart/index';
 
 const route = (event: Event) => {
     event = event || window.event;
@@ -13,12 +14,14 @@ const route = (event: Event) => {
 const validPaths = ["", "/", "/cart", "/product"];
 const handleLocation = () => {
     const path = window.location.pathname;
-
-    if (path === '/') {
+    
+    if (path === '/' || path === '') {
       createSorting();
       createGoodsCards(base.products);
+      cart.checkCart();
     } else if (path === "/cart") {
-      // TODO: add function createCart
+      cart.checkCart();
+      cart.openCart();
     } else { 
       create404();
     }

@@ -1,5 +1,6 @@
 import './../../libs/reset.css';
 import './style.css';
+import { cart } from '../cart/index';
 
 interface product {
         id: number;
@@ -76,8 +77,8 @@ console.log('createGoodsCards');
         btn.classList.add('btn__toCart');
         btn.dataset.artikul = product.id + '';
         btn.addEventListener('click', () => {
-            console.log(`add product ${product.id} to cart `)
-            // TODO: add function 'addToCard'
+            cart.addToCart(product.id);
+            // console.log(`add product ${product.id} to cart `)
         })
         btn.textContent = 'to cart';
         card.append(btn);
