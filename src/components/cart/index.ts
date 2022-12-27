@@ -1,7 +1,8 @@
 import './style.css';
 import { base } from '../goodsBase';
+import { productInCart } from './product';
 
-let cartAmount = document.querySelector('.cart__amoumt');
+const cartAmount = document.querySelector('.cart__amoumt');
 const main = document.querySelector('main');
 
 class Cart {
@@ -15,7 +16,7 @@ class Cart {
         }
     }
 
-    protected changeCartAmount = () => {
+    public changeCartAmount = () => {
         if (cartAmount != undefined) {
             cartAmount.innerHTML = this.contents.amount + '';     
         }
@@ -24,7 +25,7 @@ class Cart {
     public openCart = () => {
         let cartConteiner: HTMLDivElement;
         if (document.querySelector('.cart__conteiner')) {
-            cartConteiner = document.querySelector('..cart__conteiner')!;
+            cartConteiner = document.querySelector('.cart__conteiner')!;
             document.querySelector('.cart__conteiner')!.innerHTML = '';
         } else {
             cartConteiner = document.createElement('div');
@@ -32,42 +33,63 @@ class Cart {
             main?.append(cartConteiner);
         }
 
-        for (let key in this.contents) {
-            const product = base.products.find((elem) => elem.id == +key)!;
-            console.log(this.contents, 'this');
-            const productAmount = this.contents[key];
-            console.log(productAmount, 'productAmount');
-
-
-            const card = document.createElement('div');
-            card.classList.add('item');
-            card.addEventListener('click', (e) => {
-            if (!(e.target as HTMLElement).classList.contains('btn')) {
-                console.log(`click to product ${product.id} `)
+        for (let key in this.contents) { 
+            if (key !== 'amount') {
+                const product = base.products.find((elem) => elem.id == +key)!;
+                console.log(this.contents, 'this');
+                const productAmount = this.contents[key];
+                console.log(productAmount, 'productAmount');
+    
+                const card = document.createElement('div');
+                card.classList.add('item');
+                card.addEventListener('click', (e) => {
+                if (!(e.target as HTMLElement).classList.contains('btn')) {
+                    console.log(`click to product ${product.id} `)
+                }
+                })
+    
+            card.innerHTML = `<span class="delete-btn" data-artikul = ${product.id}></span>
+            <div class="image">
+              <img src="${product.images[0]}" alt=""/>
+            </div>
+            <div class="description">
+              <span>${product.title}</span>
+              <span>${product.brand}</span>
+              <span>${product.description}</span>
+            </div>
+            <div class="quantity">
+              <button class="plus-btn" data-artikul = ${product.id} data-stock = ${product.stock} type="button" name="button">+</button>
+              <input type="text"  name="name" value="${productAmount}">
+              <button class="minus-btn" data-artikul = ${product.id} type="button" name="button">-</button>
+            </div>
+            <div class="total-price">$${product.price * productAmount}</div>`;
+                cartConteiner.append(card);
             }
+            }
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (e.target instanceof HTMLElement && e.target.dataset.artikul) {
+                    productInCart.deleteProduct(e.target.dataset.artikul)
+                }
             })
+        })
 
-        card.innerHTML = `<div class="buttons">
-          <span class="delete-btn"></span>
-          <span class="like-btn"></span>
-        </div>
-        <div class="image">
-          <img src="${product.images[0]}" alt=""/>
-        </div>
-        <div class="description">
-          <span>${product.title}</span>
-          <span>${product.brand}</span>
-          <span>${product.description}</span>
-        </div>
-        <div class="quantity">
-          <button class="plus-btn" type="button" name="button">+</button>
-          <input type="text" name="name" value="${productAmount}">
-          <button class="minus-btn" type="button" name="button">-</button>
-        </div>
-        <div class="total-price">$${product.price * productAmount}</div>`;
-            cartConteiner.append(card);
+        document.querySelectorAll('.plus-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (e.target instanceof HTMLElement && e.target.dataset.artikul && e.target.dataset.stock) {
+                    productInCart.plusProduct(e.target.dataset.artikul, e.target.dataset.stock)
+                }
+            })
+        })
 
-        }
+        document.querySelectorAll('.minus-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (e.target instanceof HTMLElement && e.target.dataset.artikul) {
+                    productInCart.minusProduct(e.target.dataset.artikul)
+                }
+            })
+        })
     }
 
     public checkCart = () => {
