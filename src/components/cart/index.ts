@@ -33,6 +33,10 @@ class Cart {
             main?.append(cartConteiner);
         }
 
+        if (this.contents.amount === 0) {
+            cartConteiner.innerHTML = 'Cart is Empty';
+        }
+
         for (let key in this.contents) { 
             if (key !== 'amount') {
                 const product = base.products.find((elem) => elem.id == +key)!;
