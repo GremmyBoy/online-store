@@ -77,7 +77,7 @@ console.log('createGoodsCards');
         btn.classList.add('btn__toCart');
         btn.dataset.artikul = product.id + '';
         btn.addEventListener('click', () => {
-            cart.addToCart(product.id);
+            cart.addToCart(product.id, product.price);
             // console.log(`add product ${product.id} to cart `)
         })
         btn.textContent = 'to cart';

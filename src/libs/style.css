@@ -41,7 +41,8 @@ body {
     line-height: 20px;
 }
 
-.header-count p {
+.header__total-price,
+.total-price {
     font-family: 'Italianno';
     font-weight: 400;
     font-style: normal;
