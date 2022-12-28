@@ -27,9 +27,15 @@ class Cart {
 
     public changeTotalPrice = () => {
         if (allPrice != undefined) {
-            !this.contents.totalPrice ?
-            allPrice.innerHTML = '0.00' :
-            allPrice.innerHTML = this.contents.totalPrice + '.00'; 
+            if (!this.contents.totalPrice) {
+                allPrice.innerHTML = '0.00';
+            } else {
+                if (this.contents.totalPrice >= 1000) {
+                    allPrice.innerHTML = `${Math.floor(this.contents.totalPrice/1000)},${this.contents.totalPrice%1000}` + '.00'; 
+                } else {
+                    allPrice.innerHTML = this.contents.totalPrice + '.00'; 
+                }
+            }        
         }
     }
 
