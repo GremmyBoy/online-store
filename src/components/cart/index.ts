@@ -62,19 +62,26 @@ class Cart {
         
                 card.innerHTML = `<span class="delete-btn" data-artikul = ${product.id} data-price = ${product.price}></span>
                 <div class="image">
-                  <img src="${product.images[0]}" alt=""/>
+                  <img src="${product.images[0]}" alt="${product.title}"/>
                 </div>
-                <div class="description">
-                  <span>${product.title}</span>
-                  <span>${product.brand}</span>
-                  <span>${product.description}</span>
+                <div class="info">
+                    <div class="info__name">
+                        <span>${product.title}</span>
+                        <span>${product.brand}</span>
+                    </div>
+                  <span class="info__description">${product.description}</span>
+                    <div class="info__details">
+                        <span> Rating: ${product.rating}</span>
+                        <span> Discount: ${product.discountPercentage}%</span>
+                        <span> Stock: ${product.stock}</span>
+                    </div>
                 </div>
                 <div class="quantity">
-                  <button class="plus-btn" data-artikul = ${product.id} data-stock = ${product.stock} data-price = ${product.price} type="button" name="button">+</button>
-                  <input type="text"  name="name" value="${productAmount}">
-                  <button class="minus-btn" data-artikul = ${product.id} data-price = ${product.price} type="button" name="button">-</button>
+                    <button class="minus-btn" data-artikul = ${product.id} data-price = ${product.price} type="button" name="button">-</button>
+                    <input type="text" name="name" value="${productAmount}">
+                    <button class="plus-btn" data-artikul = ${product.id} data-stock = ${product.stock} data-price = ${product.price} type="button" name="button">+</button>
                 </div>
-                <div class="total-price">$${product.price * productAmount}</div>`;
+                <div class="price">$${product.price * productAmount}</div>`;
                     cartConteiner.append(card);
                 }
                 }

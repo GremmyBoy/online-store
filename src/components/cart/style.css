@@ -1,5 +1,5 @@
 .cart__conteiner {
-    width: 750px;
+    max-width: 750px;
     margin: 30px auto;
     display: flex;
     flex-direction: column;
@@ -10,16 +10,37 @@
   .item {
     height: auto;
     background: white;
-    justify-content: space-evenly;
+    justify-content: space-between;
     border-radius: 10px;
     display: flex;
     align-items: center;
-    padding: 15px;
-}
-   
-  .item:nth-child(3) {
-    border-top:  1px solid #E1E8EE;
-    border-bottom:  1px solid #E1E8EE;
+    padding: 15px 25px;
+    gap: 15px;
+  }
+
+  .info {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .info__name,
+  .info__details {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .info__name span:first-child {
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+
+  .info__description {
+    border-bottom: 2px solid lightgray;
+    border-top: 2px solid lightgray;
+    padding: 5px 0;
   }
 
   .delete-btn {
@@ -31,10 +52,10 @@
   }
    
   .image img {
-    margin-right: 50px;
     height: 100px;
     max-width: 100px;
     object-fit: contain;
+    border-radius: 5px;
   }
    
   .description {
@@ -49,22 +70,8 @@
     color: #43484D;
     font-weight: 400;
   }
-   
-  .description span:first-child {
-    margin-bottom: 5px;
-  }
-  .description span:last-child {
-    font-weight: 300;
-    margin-top: 8px;
-    color: #86939E;
-  }
 
-  .quantity {
-    padding-top: 20px;
-    margin-right: 60px;
-  }
   .quantity input {
-    /* -webkit-appearance: none; */
     border: none;
     text-align: center;
     width: 32px;
@@ -81,21 +88,13 @@
     border: none;
     cursor: pointer;
   }
-  .minus-btn img {
-    margin-bottom: 3px;
-  }
-  .plus-btn img {
-    margin-top: 2px;
-  }
    
   button:focus,
   input:focus {
     outline:0;
   }
 
-  .total-price {
-    width: 83px;
-    padding-top: 27px;
+  .price {
     text-align: center;
     font-size: 16px;
     color: #43484D;
@@ -120,8 +119,5 @@
       width: 100%;
       text-align: center;
       margin: 6px 0;
-    }
-    .buttons {
-      margin-right: 20px;
     }
   }
