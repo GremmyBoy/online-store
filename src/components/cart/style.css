@@ -71,7 +71,13 @@
     font-weight: 400;
   }
 
-  .quantity input {
+  .quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .quantity .amount {
     border: none;
     text-align: center;
     width: 32px;
@@ -89,8 +95,7 @@
     cursor: pointer;
   }
    
-  button:focus,
-  input:focus {
+  button:focus {
     outline:0;
   }
 

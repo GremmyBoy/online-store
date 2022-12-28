@@ -84,7 +84,7 @@ class Cart {
                 </div>
                 <div class="quantity">
                     <button class="minus-btn" data-artikul = ${product.id} data-price = ${product.price} type="button" name="button">-</button>
-                    <input type="text" name="name" value="${productAmount}">
+                    <div class="amount">${productAmount}</div>
                     <button class="plus-btn" data-artikul = ${product.id} data-stock = ${product.stock} data-price = ${product.price} type="button" name="button">+</button>
                 </div>
                 <div class="price">$${product.price * productAmount}</div>`;
