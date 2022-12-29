@@ -51,7 +51,9 @@ class Cart {
         }
 
         if (this.contents.amount === 0) {
-            cartConteiner.innerHTML = 'Cart is Empty';
+            if (main) {
+                main.innerHTML = 'Cart is Empty';
+            }
         } else {
             for (let key in this.contents) { 
                 if (key !== 'amount' && key !== 'totalPrice') {
