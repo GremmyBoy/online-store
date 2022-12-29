@@ -16,9 +16,20 @@ const handleLocation = () => {
     const path = window.location.pathname;
     
     if (path === '/' || path === '') {
+      document.querySelector('main')!.innerHTML = '';
       createSorting();
       createGoodsCards(base.products);
       cart.checkCart();
+
+      const cartIco = document.querySelector('.header__cart');
+      cartIco?.addEventListener('click', () => {
+        const { origin } = new URL(window.location.href);
+        console.log( origin);
+        let newUrl = new URL(origin +`/cart`);
+        console.log( newUrl);
+        window.history.pushState({}, '', newUrl);
+        cart.openCart();
+      })
     } else if (path === "/cart") {
       cart.checkCart();
       cart.openCart();

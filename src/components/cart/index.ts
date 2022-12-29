@@ -40,6 +40,7 @@ class Cart {
     }
 
     public openCart = () => {
+        main!.innerHTML = '';
         let cartConteiner: HTMLDivElement;
         if (document.querySelector('.cart__conteiner')) {
             cartConteiner = document.querySelector('.cart__conteiner')!;
