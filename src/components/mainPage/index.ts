@@ -217,7 +217,6 @@ export const createSorting = () => {
         let priceMax = parseInt((<HTMLInputElement>priceInputs[1]).value);
         if(priceMax - priceMin <= minGap) {
             (<HTMLInputElement>priceInputs[1]).value = String(priceMin + minGap);
-            
         }
         priceSpan[2].innerHTML = `${(<HTMLInputElement>priceInputs[1]).value}$` ;
     }
@@ -304,23 +303,23 @@ export const createSorting = () => {
         const brand = [...document.querySelectorAll('.brand__list input:checked')].map((v: any) => v.value);
         console.log(brand);
         
-        // const priceMin = (<HTMLInputElement>document.querySelector('.price-min')).value;
-        // console.log(priceMin);
+        const priceMin = (<HTMLInputElement>document.querySelector('.price-min')).value;
+        console.log(priceMin);
         
-        // const priceMax = (<HTMLInputElement>document.querySelector('.price-max')).value;
+        const priceMax = (<HTMLInputElement>document.querySelector('.price-max')).value;
         
-        // const stockMin = (<HTMLInputElement>document.querySelector('.stock-min')).value;
+        const stockMin = (<HTMLInputElement>document.querySelector('.stock-min')).value;
         
-        // const stockMax = (<HTMLInputElement>document.querySelector('.stock-max')).value;
+        const stockMax = (<HTMLInputElement>document.querySelector('.stock-max')).value;
         
         filteredArray = base.products.filter((n: any) => {
             return ((!category.length || category.includes(n.category)) &&
             (!brand.length || brand.includes(n.brand))
-            )
-            // (!priceMin || priceMin <= n.price) &&
-            // (!priceMax || priceMax >= n.price) &&
-            // (!stockMin || stockMin <= n.stock) &&
-            // (!stockMax || stockMax >= n.stock)  
+            ) &&
+            (!priceMin || priceMin <= n.price) &&
+            (!priceMax || priceMax >= n.price) &&
+            (!stockMin || stockMin <= n.stock) &&
+            (!stockMax || stockMax >= n.stock)  
         })
 
         createGoodsCards(filteredArray);
@@ -390,8 +389,13 @@ console.log('createGoodsCards');
         })
         btn.textContent = 'to cart';
         card.append(btn);
-
     })
+    if (base.length === 0) {
+        const zeroBlock = document.createElement('p');
+        zeroBlock.classList.add('zero-block');
+        goodsConteiner?.append(zeroBlock);
+        zeroBlock.innerHTML = 'Oops! We are not found any goods(';
+    }
 }
 
 
