@@ -32,8 +32,10 @@ class Cart {
             } else {
                 if (this.contents.totalPrice >= 1000) {
                     allPrice.innerHTML = `${Math.floor(this.contents.totalPrice/1000)},${this.contents.totalPrice%1000}` + '.00'; 
+                    return `${Math.floor(this.contents.totalPrice/1000)},${this.contents.totalPrice%1000}` + '.00';
                 } else {
                     allPrice.innerHTML = this.contents.totalPrice + '.00'; 
+                    return this.contents.totalPrice + '.00'; 
                 }
             }        
         }
@@ -126,6 +128,28 @@ class Cart {
                 })
             })
         }
+
+        this.createTotalBlock();
+    }
+
+    createTotalBlock = () => {
+        let totalBlock: HTMLDivElement;
+        if (document.querySelector('.total-block')) {
+            totalBlock = document.querySelector('.total-block')!;
+            document.querySelector('.total-block')!.innerHTML = '';
+        } else {
+            totalBlock = document.createElement('div');
+            totalBlock.classList.add('total-block');
+            main?.append(totalBlock);
+        }
+
+        totalBlock.innerHTML = `<h2 class="title">Summary</h2>
+        <div class="totals">
+            <p class="subtitle">Products: <span class="total-cart__amount">${this.contents.amount}</span></p>
+            <p class="subtitle">Total: <span class="total-cart__price">$${this.changeTotalPrice()}</span></p></div>
+            <div class="promo-code__block"><input class="promo-code" type="search" placeholder="Enter promo code">
+            <span>Promo for test: "RS", "EPM"</span></div>
+            <button class=" btn btn-buy"> BUY NOW</button>`;
     }
 
     public checkCart = () => {
