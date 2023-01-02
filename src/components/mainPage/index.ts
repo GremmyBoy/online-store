@@ -235,7 +235,7 @@ export const createSorting = () => {
     stockValues.classList.add('stock__values');
     stockBlock.append(stockValues);
 
-    for(let i = 0; i < 3; i++){
+    for(let i = 0; i < 3; i++) {
         const stockSpan = document.createElement('span');
         stockValues.append(stockSpan);
     }
@@ -255,8 +255,7 @@ export const createSorting = () => {
     stockInputTrack.classList.add('stock__track');
     stockFormBlock.append(stockInputTrack);
 
-
-    for(let i = 0; i < 2; i++){
+    for(let i = 0; i < 2; i++) {
         const stockInput = document.createElement('input');
         stockInput.setAttribute('type', 'range');
         stockInput.setAttribute('min', '2');
@@ -334,7 +333,24 @@ export const createSorting = () => {
 // сreate Сards
 
 export const createGoodsCards = (base: product[]) => {
-console.log('createGoodsCards');
+    let products: HTMLDivElement;
+    if (document.querySelector('.products')) {
+        products = document.querySelector('.products')!;
+        document.querySelector('.products')!.innerHTML = '';
+    } else {
+        products = document.createElement('div');
+        products.classList.add('products');
+        main?.append(products);
+    }
+
+    const searchInputBlock = document.createElement('div');
+    searchInputBlock.classList.add('search__block');
+    products?.append(searchInputBlock);
+
+    const searchInput = document.createElement('input');
+    searchInput.classList.add('search__input');
+    searchInputBlock.append(searchInput);
+
     let goodsConteiner: HTMLDivElement;
     if (document.querySelector('.goods__conteiner')) {
         goodsConteiner = document.querySelector('.goods__conteiner')!;
@@ -342,9 +358,13 @@ console.log('createGoodsCards');
     } else {
         goodsConteiner = document.createElement('div');
         goodsConteiner.classList.add('goods__conteiner');
-        main?.append(goodsConteiner);
+        products?.append(goodsConteiner);
     }
 
+    // const searchInputBlock = document.createElement('div');
+    // searchInputBlock.classList.add('search__block');
+
+    
     base.forEach((product: product) => {
         const card = document.createElement('div');
         card.classList.add('card');
@@ -390,12 +410,40 @@ console.log('createGoodsCards');
         btn.textContent = 'to cart';
         card.append(btn);
     })
+
     if (base.length === 0) {
         const zeroBlock = document.createElement('p');
         zeroBlock.classList.add('zero-block');
         goodsConteiner?.append(zeroBlock);
         zeroBlock.innerHTML = 'Oops! We are not found any goods(';
     }
+
+    // Create search function
+
+    // searchInput.addEventListener('input', function() {
+
+    // })
+    searchInput.addEventListener('input', function() {
+        let val = this.value.trim();
+        let cards = document.querySelectorAll('.card');
+        let reg = new RegExp(val, 'gi');
+        if(val != '') {
+            cards.forEach((card: any) => {
+                if(card.innerText.search(reg) == -1) {
+                    card.classList.add('hide');
+                }
+                else {
+                    card.classList.remove('hide');
+                }
+            })
+        }
+        else {
+            cards.forEach((card) => {
+                card.classList.remove('hide');
+            })
+        }
+        console.log(cards);
+    })
 }
 
 
