@@ -421,7 +421,19 @@ export const createGoodsCards = (base: product[]) => {
                 count++;
             }
         })
-        console.log(count);
+
+        if(count === 0) { 
+            let zeroBlock: HTMLElement;
+            if (document.querySelector('.zero-block')) {
+                zeroBlock = document.querySelector('.zero-block')!;
+                document.querySelector('.zero-block')!.innerHTML = '';
+            } else {
+                zeroBlock = document.createElement('p');
+                zeroBlock.classList.add('zero-block');
+                goodsConteiner?.append(zeroBlock);
+            }
+            zeroBlock.innerHTML = 'Oops! We are not found any goods(';
+        }
         return count;
     }
 
@@ -454,24 +466,7 @@ export const createGoodsCards = (base: product[]) => {
         // filteredArray = document.querySelectorAll('.card');
         // console.log(filteredArray);
         countGoods.textContent = `COUNT:${goodsNumber()}`;
-        // if(countGoods.textContent === `COUNT:0`) {
-        //     let zeroBlock = document.createElement('p');
-        //     zeroBlock.classList.add('zero-block');
-        //     goodsConteiner?.append(zeroBlock);
-        //     zeroBlock.innerHTML = 'Oops! We are not found any goods(';
-        // }
-        // else {
-        //     let zeroBlock = document.querySelector('.zero-block');
-        //     zeroBlock?.remove();
-        // }
     })
-
-    if (countGoods.textContent === 'COUNT:0') {
-        let zeroBlock = document.createElement('p');
-        zeroBlock.classList.add('zero-block');
-        goodsConteiner?.append(zeroBlock);
-        zeroBlock.innerHTML = 'Oops! We are not found any goods(';
-    }
 }
 
 
