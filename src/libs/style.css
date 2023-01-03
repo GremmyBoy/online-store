@@ -41,12 +41,32 @@ body {
     line-height: 20px;
 }
 
-.header-count p {
+.header__total-price,
+.total-price {
     font-family: 'Italianno';
     font-weight: 400;
     font-style: normal;
     font-size: 35px;
     color: orange;
+}
+
+.cart {
+    position: relative;
+    cursor: pointer;
+}
+
+.cart__amoumt {
+    position: absolute;
+    top: -5%;
+    left: 25%;
+    min-width: 25px;
+    height: 25px;
+    padding: 2px;
+    text-align: center;
+    border: 2px solid gray;
+    border-radius: 50%;
+    color: gray;
+    background: white;
 }
 
 

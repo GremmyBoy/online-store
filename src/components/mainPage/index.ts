@@ -1,5 +1,6 @@
 import './../../libs/reset.css';
 import './style.css';
+import { cart } from '../cart/index';
 import { base } from '../goodsBase';
 
 export interface product {
@@ -405,8 +406,8 @@ export const createGoodsCards = (base: product[]) => {
         btn.classList.add('btn__toCart');
         btn.dataset.artikul = product.id + '';
         btn.addEventListener('click', () => {
-            console.log(`add product ${product.id} to cart `)
-            // TODO: add function 'addToCard'
+            cart.addToCart(product.id, product.price);
+            // console.log(`add product ${product.id} to cart `)
         })
         btn.textContent = 'to cart';
         card.append(btn);
