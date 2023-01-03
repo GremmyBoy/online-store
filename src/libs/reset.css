@@ -89,6 +89,10 @@ button, input[type="submit"] {
     cursor: pointer;
 }
 
+input[type="range"] {
+	appearance: none;
+}
+
 input:focus, input:active,
 button:focus, button:active {
     outline: none;

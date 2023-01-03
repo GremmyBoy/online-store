@@ -3,6 +3,16 @@ main {
     justify-content: space-between;
 }
 
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 1em;
+    width: 1em;
+    background-color: orange;
+    border-radius: 50%;
+    pointer-events: auto;
+}
+
+/* Styles for sorting block */
 .sorting__conteiner {
     display: flex;
     flex-direction: column;
@@ -29,59 +39,283 @@ main {
     scale: 1.1;
 }
 
-.goods__conteiner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 65%;
-    padding: 20px;
+
+/* Styles for filter block */
+
+.filter__block {
+    margin-top: 20px;
 }
 
-.card {
+/* Styles for category block */
+
+.category__block h2 {
+    text-align: center;
+    padding: 2px;
+    border-bottom: 1px solid orange;
+    /* background-color: #181a1c; */
+}
+
+.category__block {
+    padding: 2px;
+    border: 1px solid orange;
+    border-radius: 0.5rem;
+    margin-bottom: 5%;
+    text-transform: uppercase;
+    overflow: hidden;
+}
+
+.category__list {
+    padding: 6px;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 10rem;
+}
+
+.category__list input {
+    cursor: grab;
+}
+
+.category__list label {
+    padding: 0.3rem;
+}
+
+/* Styles for brand block */
+
+.brand__block h2 {
+    text-align: center;
+    padding: 2px;
+    border-bottom: 1px solid orange;
+    /* background-color: #181a1c; */
+}
+
+.brand__block {
+    padding: 2px;
+    border: 1px solid orange;
+    border-radius: 0.5rem;
+    margin-bottom: 5%;
+    text-transform: uppercase;
+    
+    overflow: hidden;
+}
+
+.brand__list {
+    padding: 6px;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 10rem;
+}
+
+.brand__list input {
+    cursor: grab;
+}
+
+.brand__list label {
+    padding: 0.3rem;
+}
+
+/* styles for Price block */
+
+.price__block h2 {
+    text-align: center;
+    padding: 2px;
+    border-bottom: 1px solid orange;
+}
+
+.price__values {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
-
-    width: 24%;
-    height: 350px;
-    padding: 10px;
-
-    border: 1px solid black;
-    border-radius: 5px;
-    background: #F1F3F2;
+    margin: auto;
+    padding: 0.5rem;
+    width: 90%;
 }
 
-.card__image {
-    max-width: 90%;
-    height: 160px;
-}
-
-.card__description {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
-
-.product__name {
-    font-size: 1.2rem;
-    font-weight: 800;
-    text-align: center;
-    text-transform: capitalize;
-}
-
-.btn {
-    background-color: white;
-    border: 1px solid #181a1c;
-    border-radius: 0.3rem;
-    cursor: pointer;
-    width: 100px;
-    height: 35px;
+.price__block {
+    padding: 2px;
+    border: 1px solid orange;
+    border-radius: 0.5rem;
+    margin-bottom: 5%;
     text-transform: uppercase;
 }
 
-.btn:hover {
-    transform: scale(1.1);
+.price__form-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    position: relative;
 }
+
+.price__track {
+    width: 90%;
+    height: 5px;
+    background-color: white;
+    border: 5px;
+}
+
+.price__input {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    width: 90%;
+    pointer-events: none;
+}
+
+.price__input::-webkit-slider-thumb {
+    z-index: 2;
+    position: relative;
+    top: 2px;
+    margin-top: -7px;
+}
+
+/* create Stock Block  */
+
+.stock__block h2 {
+    text-align: center;
+    padding: 2px;
+    border-bottom: 1px solid orange;
+    /* background-color: #181a1c; */
+}
+
+.stock__values {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 0.5rem;
+    width: 90%;
+}
+
+.stock__block {
+    padding: 2px;
+    border: 1px solid orange;
+    border-radius: 0.5rem;
+    margin-bottom: 5%;
+    text-transform: uppercase;
+}
+
+.stock__form-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    position: relative;
+}
+
+.stock__track {
+    width: 90%;
+    height: 5px;
+    background-color: white;
+    border: 5px;
+}
+
+.stock__input {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    width: 90%;
+    pointer-events: none; 
+}
+
+.stock__input::-webkit-slider-thumb {
+    z-index: 2;
+    position: relative;
+    top: 2px;
+    margin-top: -7px;
+}
+
+    /* Styles for products*/
+    .products {
+        display: flex;
+        flex-direction: column;
+        width: 65%;
+        padding-top: 20px;
+    }
+
+    .search__block {
+        display: flex;
+        align-items: center;
+        border: 1px solid orange;
+        border-radius: 0.5rem;
+        justify-content: space-around;
+        padding: 2px;
+    }
+
+    .search__input {
+        border: 1px solid black;
+        border-radius: 15px;
+        color: orange;
+        padding-left: 5px;
+    }
+
+    .count__goods {
+        font-size: 25px;
+    }
+
+    .goods__conteiner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    
+        width: 24%;
+        height: 350px;
+        padding: 10px;
+    
+        border: 1px solid black;
+        border-radius: 5px;
+        background: #F1F3F2;
+    }
+
+    .hide {
+        display: none;
+    }
+    
+    .card__image {
+        max-width: 90%;
+        height: 160px;
+    }
+    
+    .card__description {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .product__name {
+        font-size: 1.2rem;
+        font-weight: 800;
+        text-align: center;
+        text-transform: capitalize;
+    }
+    
+    .btn {
+        background-color: white;
+        border: 1px solid #181a1c;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        width: 100px;
+        height: 35px;
+        text-transform: uppercase;
+    }
+    
+    .btn:hover {
+        transform: scale(1.1);
+    }
+    
+    .zero-block {
+        font-size: 45px;
+        margin: auto;
+    }
