@@ -1,6 +1,7 @@
 import './style.css';
 import { base } from '../goodsBase';
 import { productInCart } from './product';
+import { modal } from './modal-window';
 
 const cartAmount = document.querySelector('.cart__amoumt');
 const main = document.querySelector('main');
@@ -127,9 +128,9 @@ class Cart {
                     }
                 })
             })
-        }
 
-        this.createTotalBlock();
+            this.createTotalBlock();
+        }
     }
 
     createTotalBlock = () => {
@@ -148,8 +149,16 @@ class Cart {
             <p class="subtitle">Products: <span class="total-cart__amount">${this.contents.amount}</span></p>
             <p class="subtitle">Total: <span class="total-cart__price">$${this.changeTotalPrice()}</span></p></div>
             <div class="promo-code__block"><input class="promo-code" type="search" placeholder="Enter promo code">
-            <span>Promo for test: "RS", "EPM"</span></div>
-            <button class=" btn btn-buy"> BUY NOW</button>`;
+            <span>Promo for test: "RS", "EPM"</span></div>`;
+
+            const btnBuy = document.createElement('button');
+            btnBuy.classList.add('btn');
+            btnBuy.classList.add('btn-buy');
+            btnBuy.textContent = 'BUY NOW';
+            totalBlock.append(btnBuy);
+            btnBuy.addEventListener('click',() => {
+               modal.openModalWindow();
+            })
     }
 
     public checkCart = () => {

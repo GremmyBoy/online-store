@@ -122,6 +122,7 @@
 .title {
   font-size: 25px;
   border-bottom: 2px solid lightgray;
+  text-align: center;
 }
 
 .totals,
@@ -135,16 +136,17 @@
   font-size: 25px;
 }
 
-.promo-code {
+.promo-code,
+input[type='text'],
+input[type='email'] {
     background-color: #E1E8EE;
-    width: 70%;
+    width: 90%;
     border-radius: 6px;
     padding: 0.4rem;
     text-align: center;
     outline: none;
     font-size: 100%;
     align-self: center;
-    margin: 15px 0 0 0 ;
 }
 
 .promo-code__block span {
@@ -159,6 +161,88 @@
   height: 40px;
   background-color: lightgray;
 }
+
+
+
+.modal-window {
+  position: fixed;
+  background: #fafafa;
+  border-radius: 9px;
+  max-width: 900px;
+  top: 51%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: 1s;
+  padding: 30px;
+  width: 50%;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.form__details,
+.credit-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 90%;
+}
+
+.credit-card {
+  background: rgb(104,118,135);
+  background: radial-gradient(circle, rgba(104,118,135,1) 0%, rgba(145,163,184,1) 100%);
+  padding: 20px;
+  border-radius: 5px;
+  width: 50%;
+  gap: 20px;
+}
+
+.card__number,
+.card__info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card__info div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.form__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backdrop {
+  background: rgba(41, 41, 41, 0.8);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 2;
+  transition: .5s;
+  cursor: pointer;
+}
+
 
   @media (max-width: 800px) {
     .shopping-cart {
