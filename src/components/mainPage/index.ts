@@ -17,8 +17,8 @@ export interface product {
 }
 
 const main = document.querySelector('main');
-
-let filteredArray = base.products;
+let filteredArray: any;
+    filteredArray = base.products;
 
 const sortFunctionUp = (arr: product[], item: string) => {
     return arr.slice().sort(
@@ -346,10 +346,11 @@ export const createGoodsCards = (base: product[]) => {
     const searchInputBlock = document.createElement('div');
     searchInputBlock.classList.add('search__block');
     products?.append(searchInputBlock);
-
+    
     const searchInput = document.createElement('input');
     searchInput.classList.add('search__input');
     searchInputBlock.append(searchInput);
+
 
     let goodsConteiner: HTMLDivElement;
     if (document.querySelector('.goods__conteiner')) {
@@ -411,18 +412,25 @@ export const createGoodsCards = (base: product[]) => {
         card.append(btn);
     })
 
-    if (base.length === 0) {
-        const zeroBlock = document.createElement('p');
-        zeroBlock.classList.add('zero-block');
-        goodsConteiner?.append(zeroBlock);
-        zeroBlock.innerHTML = 'Oops! We are not found any goods(';
+    const goodsNumber = () => {
+        let goods = document.querySelectorAll('.card');
+        let count = 0;
+        goods.forEach((item) => {
+            if (!item.classList.contains('hide')){
+                count++;
+            }
+        })
+        console.log(count);
+        return count;
     }
+
+    const countGoods = document.createElement('p');
+    countGoods.classList.add('count__goods');
+    countGoods.textContent = `COUNT:${goodsNumber()}`
+    searchInputBlock.append(countGoods);
 
     // Create search function
 
-    // searchInput.addEventListener('input', function() {
-
-    // })
     searchInput.addEventListener('input', function() {
         let val = this.value.trim();
         let cards = document.querySelectorAll('.card');
@@ -442,12 +450,28 @@ export const createGoodsCards = (base: product[]) => {
                 card.classList.remove('hide');
             })
         }
-        console.log(cards);
+        // filteredArray = document.querySelectorAll('.card');
+        // console.log(filteredArray);
+        countGoods.textContent = `COUNT:${goodsNumber()}`;
+        // if(countGoods.textContent === `COUNT:0`) {
+        //     let zeroBlock = document.createElement('p');
+        //     zeroBlock.classList.add('zero-block');
+        //     goodsConteiner?.append(zeroBlock);
+        //     zeroBlock.innerHTML = 'Oops! We are not found any goods(';
+        // }
+        // else {
+        //     let zeroBlock = document.querySelector('.zero-block');
+        //     zeroBlock?.remove();
+        // }
     })
+
+    if (countGoods.textContent === 'COUNT:0') {
+        let zeroBlock = document.createElement('p');
+        zeroBlock.classList.add('zero-block');
+        goodsConteiner?.append(zeroBlock);
+        zeroBlock.innerHTML = 'Oops! We are not found any goods(';
+    }
 }
-
-
-
 
 
 
