@@ -1,43 +1,44 @@
-import "./index.css";
-import { createSorting , createGoodsCards } from './components/mainPage/index';
+import './index.css';
+import { createSorting, createGoodsCards } from './components/mainPage/index';
 import { base } from './components/goodsBase';
 import { create404 } from './components/error/404';
 import { cart } from './components/cart/index';
 
-const route = (event: Event) => {
-    event = event || window.event;
-    event.preventDefault();
-    window.history.pushState({}, "", (event.target as HTMLAnchorElement).href);
-    handleLocation();
-};
-
-const validPaths = ["", "/", "/cart", "/product"];
+// const validPaths = ['', '/', '/cart', '/product'];
 const handleLocation = () => {
     const path = window.location.pathname;
-    
-    if (path === '/' || path === '') {
-      document.querySelector('main')!.innerHTML = '';
-      createSorting();
-      createGoodsCards(base.products);
-      cart.checkCart();
 
-      const cartIco = document.querySelector('.header__cart');
-      cartIco?.addEventListener('click', () => {
-        const { origin } = new URL(window.location.href);
-        console.log( origin);
-        let newUrl = new URL(origin +`/cart`);
-        console.log( newUrl);
-        window.history.pushState({}, '', newUrl);
+    if (path === '/' || path === '') {
+        const main = document.querySelector('main');
+        if (main) main.innerHTML = '';
+        createSorting();
+        createGoodsCards(base.products);
+        cart.checkCart();
+
+        const cartIco = document.querySelector('.header__cart');
+        cartIco?.addEventListener('click', () => {
+            const { origin } = new URL(window.location.href);
+            console.log(origin);
+            const newUrl = new URL(origin + `/cart`);
+            console.log(newUrl);
+            window.history.pushState({}, '', newUrl);
+            cart.openCart();
+        });
+    } else if (path === '/cart') {
+        cart.checkCart();
         cart.openCart();
-      })
-    } else if (path === "/cart") {
-      cart.checkCart();
-      cart.openCart();
-    } else { 
-      create404();
+    } else {
+        create404();
     }
-}; 
+};
+
+// const route = (event: Event) => {
+//     event = event || window.event;
+//     event.preventDefault();
+//     window.history.pushState({}, '', (event.target as HTMLAnchorElement).href);
+//     handleLocation();
+// };
 
 window.onpopstate = handleLocation;
-(window as any).route = route;
+// (window as any).route = route;
 handleLocation();

@@ -4,54 +4,182 @@ import { cart } from '../cart/index';
 import { base } from '../goodsBase';
 
 export interface product {
-        id: number;
-        title: string;
-        description: string;
-        price: number;
-        discountPercentage: number;
-        rating: number;
-        stock: number;
-        brand: string;
-        category: string;
-        thumbnail: string;
-        images: string[];
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    discountPercentage: number;
+    rating: number;
+    stock: number;
+    brand: string;
+    category: string;
+    thumbnail: string;
+    images: string[];
 }
 
 const main = document.querySelector('main');
-let filteredArray: any;
-    filteredArray = base.products;
+let filteredArray: product[];
+filteredArray = base.products;
 
-const sortFunctionUp = (arr: product[], item: string) => {
-    return arr.slice().sort(
-    (a: any, b: any) => 
-        a[item] - b[item]
-    )
-}
+export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
+    let products: HTMLDivElement;
+    const productsFromPage = document.querySelector('.products');
+    if (productsFromPage) {
+        products = document.querySelector('.products') as HTMLDivElement;
+        productsFromPage.innerHTML = '';
+    } else {
+        products = document.createElement('div');
+        products.classList.add('products');
+        main?.append(products);
+    }
 
-const sortFunctionDown = (arr: product[], item: string) => {
-    return arr.slice().sort(
-    (a: any, b: any) => 
-        b[item] - a[item]
-    )
-}
+    const searchInputBlock = document.createElement('div');
+    searchInputBlock.classList.add('search__block');
+    products?.append(searchInputBlock);
+
+    // const searchInput = document.createElement('input');
+    // searchInput.classList.add('search__input');
+    // searchInputBlock.append(searchInput);
+
+    let goodsConteiner: HTMLDivElement;
+    const goodsConteinerFromPage = document.querySelector('.goods__conteine');
+    if (goodsConteinerFromPage) {
+        goodsConteiner = document.querySelector(
+            '.goods__conteiner'
+        ) as HTMLDivElement;
+        goodsConteinerFromPage.innerHTML = '';
+    } else {
+        goodsConteiner = document.createElement('div');
+        goodsConteiner.classList.add('goods__conteiner');
+        products?.append(goodsConteiner);
+    }
+
+    // const searchInputBlock = document.createElement('div');
+    // searchInputBlock.classList.add('search__block');
+
+    base.forEach((product: product | undefined) => {
+        if (product) {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.artikul = product.id + '';
+            card.addEventListener('click', (e) => {
+                if (!(e.target as HTMLElement).classList.contains('btn')) {
+                    console.log(`click to product ${product.id} `);
+                }
+            });
+            goodsConteiner.append(card);
+
+            const image = document.createElement('img');
+            image.classList.add('card__image');
+            image.src = product.images[0];
+            card.append(image);
+
+            const description = document.createElement('div');
+            description.classList.add('card__description');
+            card.append(description);
+
+            const name = document.createElement('p');
+            name.classList.add('product__name');
+            name.textContent = product.title;
+            description.append(name);
+
+            const brand = document.createElement('p');
+            brand.classList.add('product__brand');
+            brand.textContent = product.brand;
+            description.append(brand);
+
+            const price = document.createElement('p');
+            price.classList.add('product__price');
+            price.textContent = `$ ${product.price}`;
+            description.append(price);
+
+            const btn = document.createElement('button');
+            btn.classList.add('btn');
+            btn.classList.add('btn__toCart');
+            btn.dataset.artikul = product.id + '';
+            btn.addEventListener('click', () => {
+                cart.addToCart(product.id, product.price);
+                console.log(`add product ${product.id} to cart `);
+            });
+            btn.textContent = 'to cart';
+            card.append(btn);
+        }
+    });
+
+    const goodsNumber = () => {
+        const goods = document.querySelectorAll('.card');
+        let count = 0;
+        goods.forEach((item) => {
+            if (!item.classList.contains('hide')) {
+                count++;
+            }
+        });
+
+        if (count === 0) {
+            let zeroBlock: HTMLElement;
+            const zeroBlockFromPage = document.querySelector('.zero-block');
+            if (zeroBlockFromPage) {
+                zeroBlock = document.querySelector(
+                    '.zero-block'
+                ) as HTMLDivElement;
+                zeroBlockFromPage.innerHTML = '';
+            } else {
+                zeroBlock = document.createElement('p');
+                zeroBlock.classList.add('zero-block');
+                goodsConteiner?.append(zeroBlock);
+            }
+            zeroBlock.innerHTML = 'Oops! We are not found any goods(';
+        } else {
+            const zeroBlockFromPage = document.querySelector('.zero-block');
+            if (zeroBlockFromPage) {
+                zeroBlockFromPage.innerHTML = '';
+            }
+        }
+
+        return count;
+    };
+
+    const countGoods = document.createElement('p');
+    countGoods.classList.add('count__goods');
+    countGoods.textContent = `COUNT:${goodsNumber()}`;
+    searchInputBlock.append(countGoods);
+};
+
+const sortFunctionUp = (arr: product[], sorter: string) => {
+    return arr.slice().sort((a: product, b: product) => {
+        return (
+            (a[sorter as keyof typeof a] as number) -
+            (b[sorter as keyof typeof b] as number)
+        );
+    });
+};
+
+const sortFunctionDown = (arr: product[], sorter: string) => {
+    return arr.slice().sort((a: product, b: product) => {
+        return (
+            (b[sorter as keyof typeof b] as number) -
+            (a[sorter as keyof typeof a] as number)
+        );
+    });
+};
 
 export const categoryFilter = (base: product[]) => {
-    let arr: any = [];
+    const arr: string[] = [];
     base.forEach((product: product) => {
         arr.push(product.category);
     });
-    let categorySet = new Set(arr);
+    const categorySet = new Set(arr);
     return [...categorySet];
-}
+};
 
 export const brandFilter = (base: product[]) => {
-    let arr: any = [];
+    const arr: string[] = [];
     base.forEach((product: product) => {
         arr.push(product.brand);
     });
-    let brandSet = new Set(arr);
+    const brandSet = new Set(arr);
     return [...brandSet];
-}
+};
 
 // add filter and sorting
 
@@ -59,6 +187,55 @@ export const createSorting = () => {
     const sorting = document.createElement('div');
     sorting.classList.add('sorting__conteiner');
     main?.append(sorting);
+
+    const searchInput = document.createElement('input');
+    searchInput.classList.add('search__input');
+    sorting.append(searchInput);
+
+    searchInput.addEventListener('input', function () {
+        const val = this.value.trim();
+        console.log(val);
+        // let cards = document.querySelectorAll('.card');
+        const reg = new RegExp(val, 'gi');
+        if (val != '') {
+            const finedArray: (product | undefined)[] = [];
+            filteredArray.forEach((product: product) => {
+                if (
+                    product.brand.search(reg) !== -1 ||
+                    product.category.search(reg) !== -1 ||
+                    product.description.search(reg) !== -1 ||
+                    product.title.search(reg) !== -1
+                ) {
+                    finedArray.push(product);
+                }
+            });
+            // cards.forEach((card: Element) => {
+            //     if (card instanceof HTMLDivElement) {
+            //         if(card.innerText.search(reg) !== -1) {
+            //             finedArray.push(base.products.find((item) => item.id === +card.dataset.artikul!));
+            //         }
+
+            //         // if(card.innerText.search(reg) == -1) {
+            //         //     card.classList.add('hide');
+            //         // }
+            //         // else {
+            //         //     card.classList.remove('hide');
+            //         // }
+            //     }
+            // })
+            createGoodsCards(finedArray);
+        } else {
+            createGoodsCards(filteredArray);
+        }
+        // else {
+        //     cards.forEach((card) => {
+        //         card.classList.remove('hide');
+        //     })
+        // }
+        // filteredArray = document.querySelectorAll('.card');
+        // console.log(filteredArray);
+        // countGoods.textContent = `COUNT:${goodsNumber()}`;
+    });
 
     const sortBlock = document.createElement('div');
     sortBlock.classList.add('sort__block');
@@ -72,13 +249,13 @@ export const createSorting = () => {
 
     const sortButtons = document.querySelectorAll('.sort__button');
     sortButtons[0].innerHTML = 'Price ascending';
-    sortButtons[0].addEventListener('click', (e) => {
+    sortButtons[0].addEventListener('click', () => {
         return createGoodsCards(sortFunctionUp(filteredArray, 'price'));
-    })
+    });
     sortButtons[1].innerHTML = 'Price descending';
-    sortButtons[1].addEventListener('click', (e) => {
+    sortButtons[1].addEventListener('click', () => {
         return createGoodsCards(sortFunctionDown(filteredArray, 'price'));
-    })
+    });
 
     // Create filter block
 
@@ -86,8 +263,7 @@ export const createSorting = () => {
     filterBlock.classList.add('filter__block');
     sorting.append(filterBlock);
     // addEvent INPUT for filterblock
-   
-    
+
     // create Category list
 
     const categoryBlock = document.createElement('div');
@@ -113,10 +289,10 @@ export const createSorting = () => {
         categoryList.append(categoryInput);
 
         const categoryLabel = document.createElement('label');
-        categoryLabel.setAttribute('for', `${item}`)
+        categoryLabel.setAttribute('for', `${item}`);
         categoryLabel.textContent = `${item}`;
         categoryList.append(categoryLabel);
-    })
+    });
 
     // Create brand block
 
@@ -146,14 +322,14 @@ export const createSorting = () => {
         brandLabel.setAttribute('for', `${item}`);
         brandLabel.textContent = `${item}`;
         brandList.append(brandLabel);
-    })
+    });
 
     // create price block
 
     const priceBlock = document.createElement('div');
     priceBlock.classList.add('price__block');
     filterBlock.append(priceBlock);
-    
+
     const priceTitle = document.createElement('h2');
     priceTitle.innerHTML = 'Price';
     priceBlock.append(priceTitle);
@@ -162,7 +338,7 @@ export const createSorting = () => {
     priceValues.classList.add('price__values');
     priceBlock.append(priceValues);
 
-    for(let i = 0; i < 3; i++){
+    for (let i = 0; i < 3; i++) {
         const priceSpan = document.createElement('span');
         priceValues.append(priceSpan);
     }
@@ -182,7 +358,7 @@ export const createSorting = () => {
     priceInputTrack.classList.add('price__track');
     priceFormBlock.append(priceInputTrack);
 
-    for(let i = 0; i < 2; i++){
+    for (let i = 0; i < 2; i++) {
         const priceInput = document.createElement('input');
         priceInput.setAttribute('type', 'range');
         priceInput.setAttribute('min', '10');
@@ -197,37 +373,39 @@ export const createSorting = () => {
     priceInputs[1].classList.add('price-max');
     priceInputs[1].setAttribute('value', '1749');
 
-    priceInputs[0].addEventListener('input', priceOne);
-
-    priceInputs[1].addEventListener('input', priceTwo);
-
-
     const minGap = 0;
 
     function priceOne() {
-        let priceMin = parseInt((<HTMLInputElement>priceInputs[0]).value);
-        let priceMax = parseInt((<HTMLInputElement>priceInputs[1]).value);
-        if(priceMax - priceMin <= minGap) {
-            (<HTMLInputElement>priceInputs[0]).value = String(priceMax - minGap);
+        const priceMin = parseInt((<HTMLInputElement>priceInputs[0]).value);
+        const priceMax = parseInt((<HTMLInputElement>priceInputs[1]).value);
+        if (priceMax - priceMin <= minGap) {
+            (<HTMLInputElement>priceInputs[0]).value = String(
+                priceMax - minGap
+            );
         }
         priceSpan[0].innerHTML = `${(<HTMLInputElement>priceInputs[0]).value}$`;
     }
 
     function priceTwo() {
-        let priceMin = parseInt((<HTMLInputElement>priceInputs[0]).value);
-        let priceMax = parseInt((<HTMLInputElement>priceInputs[1]).value);
-        if(priceMax - priceMin <= minGap) {
-            (<HTMLInputElement>priceInputs[1]).value = String(priceMin + minGap);
+        const priceMin = parseInt((<HTMLInputElement>priceInputs[0]).value);
+        const priceMax = parseInt((<HTMLInputElement>priceInputs[1]).value);
+        if (priceMax - priceMin <= minGap) {
+            (<HTMLInputElement>priceInputs[1]).value = String(
+                priceMin + minGap
+            );
         }
-        priceSpan[2].innerHTML = `${(<HTMLInputElement>priceInputs[1]).value}$` ;
+        priceSpan[2].innerHTML = `${(<HTMLInputElement>priceInputs[1]).value}$`;
     }
+
+    priceInputs[0].addEventListener('input', priceOne);
+    priceInputs[1].addEventListener('input', priceTwo);
 
     // create stock block
 
     const stockBlock = document.createElement('div');
     stockBlock.classList.add('stock__block');
     filterBlock.append(stockBlock);
-    
+
     const stockTitle = document.createElement('h2');
     stockTitle.innerHTML = 'Stock';
     stockBlock.append(stockTitle);
@@ -236,7 +414,7 @@ export const createSorting = () => {
     stockValues.classList.add('stock__values');
     stockBlock.append(stockValues);
 
-    for(let i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
         const stockSpan = document.createElement('span');
         stockValues.append(stockSpan);
     }
@@ -256,7 +434,7 @@ export const createSorting = () => {
     stockInputTrack.classList.add('stock__track');
     stockFormBlock.append(stockInputTrack);
 
-    for(let i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
         const stockInput = document.createElement('input');
         stockInput.setAttribute('type', 'range');
         stockInput.setAttribute('min', '2');
@@ -271,219 +449,76 @@ export const createSorting = () => {
     stockInputs[1].classList.add('stock-max');
     stockInputs[1].setAttribute('value', '150');
 
-    stockInputs[0].addEventListener('input', stockOne);
-
-    stockInputs[1].addEventListener('input', stockTwo);
-
     function stockOne() {
-        let stockMin = parseInt((<HTMLInputElement>stockInputs[0]).value);
-        let stockMax = parseInt((<HTMLInputElement>stockInputs[1]).value);
-        if(stockMax - stockMin <= minGap) {
-            (<HTMLInputElement>stockInputs[0]).value = String(stockMax - minGap);
+        const stockMin = parseInt((<HTMLInputElement>stockInputs[0]).value);
+        const stockMax = parseInt((<HTMLInputElement>stockInputs[1]).value);
+        if (stockMax - stockMin <= minGap) {
+            (<HTMLInputElement>stockInputs[0]).value = String(
+                stockMax - minGap
+            );
         }
         stockSpan[0].innerHTML = `${(<HTMLInputElement>stockInputs[0]).value}`;
     }
 
     function stockTwo() {
-        let stockMin = parseInt((<HTMLInputElement>stockInputs[0]).value);
-        let stockMax = parseInt((<HTMLInputElement>stockInputs[1]).value);
-        if(stockMax - stockMin <= minGap) {
-            (<HTMLInputElement>stockInputs[1]).value = String(stockMin + minGap);
-            
+        const stockMin = parseInt((<HTMLInputElement>stockInputs[0]).value);
+        const stockMax = parseInt((<HTMLInputElement>stockInputs[1]).value);
+        if (stockMax - stockMin <= minGap) {
+            (<HTMLInputElement>stockInputs[1]).value = String(
+                stockMin + minGap
+            );
         }
-        stockSpan[2].innerHTML = `${(<HTMLInputElement>stockInputs[1]).value}` ;
+        stockSpan[2].innerHTML = `${(<HTMLInputElement>stockInputs[1]).value}`;
     }
+
+    stockInputs[0].addEventListener('input', stockOne);
+    stockInputs[1].addEventListener('input', stockTwo);
 
     // create filter Function
 
     const filterGoods = () => {
-        const category = [...document.querySelectorAll('.category__list input:checked')].map((n: any) => n.value);
+        const category = [
+            ...document.querySelectorAll('.category__list input:checked'),
+        ].map((n: Element) => (n as HTMLInputElement).value);
         console.log(category);
 
-        const brand = [...document.querySelectorAll('.brand__list input:checked')].map((v: any) => v.value);
+        const brand = [
+            ...document.querySelectorAll('.brand__list input:checked'),
+        ].map((v: Element) => (v as HTMLInputElement).value);
         console.log(brand);
-        
-        const priceMin = (<HTMLInputElement>document.querySelector('.price-min')).value;
+
+        const priceMin = (<HTMLInputElement>(
+            document.querySelector('.price-min')
+        )).value;
         console.log(priceMin);
-        
-        const priceMax = (<HTMLInputElement>document.querySelector('.price-max')).value;
-        
-        const stockMin = (<HTMLInputElement>document.querySelector('.stock-min')).value;
-        
-        const stockMax = (<HTMLInputElement>document.querySelector('.stock-max')).value;
-        
-        filteredArray = base.products.filter((n: any) => {
-            return ((!category.length || category.includes(n.category)) &&
-            (!brand.length || brand.includes(n.brand))
-            ) &&
-            (!priceMin || priceMin <= n.price) &&
-            (!priceMax || priceMax >= n.price) &&
-            (!stockMin || stockMin <= n.stock) &&
-            (!stockMax || stockMax >= n.stock)  
-        })
+
+        const priceMax = (<HTMLInputElement>(
+            document.querySelector('.price-max')
+        )).value;
+
+        const stockMin = (<HTMLInputElement>(
+            document.querySelector('.stock-min')
+        )).value;
+
+        const stockMax = (<HTMLInputElement>(
+            document.querySelector('.stock-max')
+        )).value;
+
+        filteredArray = base.products.filter((n: product) => {
+            return (
+                (!category.length || category.includes(n.category)) &&
+                (!brand.length || brand.includes(n.brand)) &&
+                (!priceMin || +priceMin <= n.price) &&
+                (!priceMax || +priceMax >= n.price) &&
+                (!stockMin || +stockMin <= n.stock) &&
+                (!stockMax || +stockMax >= n.stock)
+            );
+        });
 
         createGoodsCards(filteredArray);
-    }
-        console.log(filterGoods());
-    filterBlock.addEventListener('input', (e) => {
+    };
+    console.log(filterGoods());
+    filterBlock.addEventListener('input', () => {
         return filterGoods();
-    })
-}
-
-
-// сreate Сards
-
-export const createGoodsCards = (base: product[]) => {
-    let products: HTMLDivElement;
-    if (document.querySelector('.products')) {
-        products = document.querySelector('.products')!;
-        document.querySelector('.products')!.innerHTML = '';
-    } else {
-        products = document.createElement('div');
-        products.classList.add('products');
-        main?.append(products);
-    }
-
-    const searchInputBlock = document.createElement('div');
-    searchInputBlock.classList.add('search__block');
-    products?.append(searchInputBlock);
-    
-    const searchInput = document.createElement('input');
-    searchInput.classList.add('search__input');
-    searchInputBlock.append(searchInput);
-
-
-    let goodsConteiner: HTMLDivElement;
-    if (document.querySelector('.goods__conteiner')) {
-        goodsConteiner = document.querySelector('.goods__conteiner')!;
-        document.querySelector('.goods__conteiner')!.innerHTML = '';
-    } else {
-        goodsConteiner = document.createElement('div');
-        goodsConteiner.classList.add('goods__conteiner');
-        products?.append(goodsConteiner);
-    }
-
-    // const searchInputBlock = document.createElement('div');
-    // searchInputBlock.classList.add('search__block');
-
-    
-    base.forEach((product: product) => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.addEventListener('click', (e) => {
-            if (!(e.target as HTMLElement).classList.contains('btn')) {
-                console.log(`click to product ${product.id} `)
-            }
-        })
-        goodsConteiner.append(card);
-
-        const image = document.createElement('img');
-        image.classList.add('card__image');
-        image.src = product.images[0];
-        card.append(image);
-
-        const description = document.createElement('div');
-        description.classList.add('card__description');
-        card.append(description);
-
-        const name = document.createElement('p');
-        name.classList.add('product__name');
-        name.textContent = product.title;
-        description.append(name);
-
-        const brand = document.createElement('p');
-        brand.classList.add('product__brand');
-        brand.textContent = product.brand;
-        description.append(brand);
-
-        const price = document.createElement('p');
-        price.classList.add('product__price');
-        price.textContent = `$ ${product.price}`;
-        description.append(price);
-
-        const btn = document.createElement('button');
-        btn.classList.add('btn');
-        btn.classList.add('btn__toCart');
-        btn.dataset.artikul = product.id + '';
-        btn.addEventListener('click', () => {
-            cart.addToCart(product.id, product.price);
-            // console.log(`add product ${product.id} to cart `)
-        })
-        btn.textContent = 'to cart';
-        card.append(btn);
-    })
-
-    const goodsNumber = () => {
-        let goods = document.querySelectorAll('.card');
-        let count = 0;
-        goods.forEach((item) => {
-            if (!item.classList.contains('hide')){
-                count++;
-            }
-        })
-        console.log(count);
-        return count;
-    }
-
-    const countGoods = document.createElement('p');
-    countGoods.classList.add('count__goods');
-    countGoods.textContent = `COUNT:${goodsNumber()}`
-    searchInputBlock.append(countGoods);
-
-    // Create search function
-
-    searchInput.addEventListener('input', function() {
-        let val = this.value.trim();
-        let cards = document.querySelectorAll('.card');
-        let reg = new RegExp(val, 'gi');
-        if(val != '') {
-            cards.forEach((card: any) => {
-                if(card.innerText.search(reg) == -1) {
-                    card.classList.add('hide');
-                }
-                else {
-                    card.classList.remove('hide');
-                }
-            })
-        }
-        else {
-            cards.forEach((card) => {
-                card.classList.remove('hide');
-            })
-        }
-        // filteredArray = document.querySelectorAll('.card');
-        // console.log(filteredArray);
-        countGoods.textContent = `COUNT:${goodsNumber()}`;
-        // if(countGoods.textContent === `COUNT:0`) {
-        //     let zeroBlock = document.createElement('p');
-        //     zeroBlock.classList.add('zero-block');
-        //     goodsConteiner?.append(zeroBlock);
-        //     zeroBlock.innerHTML = 'Oops! We are not found any goods(';
-        // }
-        // else {
-        //     let zeroBlock = document.querySelector('.zero-block');
-        //     zeroBlock?.remove();
-        // }
-    })
-
-    if (countGoods.textContent === 'COUNT:0') {
-        let zeroBlock = document.createElement('p');
-        zeroBlock.classList.add('zero-block');
-        goodsConteiner?.append(zeroBlock);
-        zeroBlock.innerHTML = 'Oops! We are not found any goods(';
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    });
+};
