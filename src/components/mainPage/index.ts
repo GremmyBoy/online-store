@@ -19,7 +19,41 @@ export interface product {
 
 const main = document.querySelector('main');
 let filteredArray: product[];
+let finedArray: (product | undefined)[] = [];
+let resultArr: (product | undefined)[] = [];
+resultArr = base.products;
 filteredArray = base.products;
+
+const goodsNumber = () => {
+    const goods = document.querySelectorAll('.card');
+    let count = 0;
+    goods.forEach((item) => {
+        if (!item.classList.contains('hide')) {
+            count++;
+        }
+    });
+
+    if (count === 0) {
+        let zeroBlock: HTMLElement;
+        const zeroBlockFromPage = document.querySelector('.zero-block');
+        if (zeroBlockFromPage) {
+            zeroBlock = document.querySelector('.zero-block') as HTMLDivElement;
+            zeroBlockFromPage.innerHTML = '';
+        } else {
+            zeroBlock = document.createElement('p');
+            zeroBlock.classList.add('zero-block');
+            document.querySelector('.goods__conteiner')?.append(zeroBlock);
+        }
+        zeroBlock.innerHTML = 'Oops! We are not found any goods(';
+    } else {
+        const zeroBlockFromPage = document.querySelector('.zero-block');
+        if (zeroBlockFromPage) {
+            zeroBlockFromPage.innerHTML = '';
+        }
+    }
+
+    return count;
+};
 
 export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
     let products: HTMLDivElement;
@@ -37,10 +71,6 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
     searchInputBlock.classList.add('search__block');
     products?.append(searchInputBlock);
 
-    // const searchInput = document.createElement('input');
-    // searchInput.classList.add('search__input');
-    // searchInputBlock.append(searchInput);
-
     let goodsConteiner: HTMLDivElement;
     const goodsConteinerFromPage = document.querySelector('.goods__conteine');
     if (goodsConteinerFromPage) {
@@ -53,9 +83,6 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
         goodsConteiner.classList.add('goods__conteiner');
         products?.append(goodsConteiner);
     }
-
-    // const searchInputBlock = document.createElement('div');
-    // searchInputBlock.classList.add('search__block');
 
     base.forEach((product: product | undefined) => {
         if (product) {
@@ -106,47 +133,17 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
         }
     });
 
-    const goodsNumber = () => {
-        const goods = document.querySelectorAll('.card');
-        let count = 0;
-        goods.forEach((item) => {
-            if (!item.classList.contains('hide')) {
-                count++;
-            }
-        });
-
-        if (count === 0) {
-            let zeroBlock: HTMLElement;
-            const zeroBlockFromPage = document.querySelector('.zero-block');
-            if (zeroBlockFromPage) {
-                zeroBlock = document.querySelector(
-                    '.zero-block'
-                ) as HTMLDivElement;
-                zeroBlockFromPage.innerHTML = '';
-            } else {
-                zeroBlock = document.createElement('p');
-                zeroBlock.classList.add('zero-block');
-                goodsConteiner?.append(zeroBlock);
-            }
-            zeroBlock.innerHTML = 'Oops! We are not found any goods(';
-        } else {
-            const zeroBlockFromPage = document.querySelector('.zero-block');
-            if (zeroBlockFromPage) {
-                zeroBlockFromPage.innerHTML = '';
-            }
-        }
-
-        return count;
-    };
-
     const countGoods = document.createElement('p');
     countGoods.classList.add('count__goods');
     countGoods.textContent = `COUNT:${goodsNumber()}`;
     searchInputBlock.append(countGoods);
 };
 
-const sortFunctionUp = (arr: product[], sorter: string) => {
-    return arr.slice().sort((a: product, b: product) => {
+const sortFunctionUp = (
+    arr: product[] | (product | undefined)[],
+    sorter: string
+) => {
+    return (arr as product[]).slice().sort((a: product, b: product) => {
         return (
             (a[sorter as keyof typeof a] as number) -
             (b[sorter as keyof typeof b] as number)
@@ -154,8 +151,11 @@ const sortFunctionUp = (arr: product[], sorter: string) => {
     });
 };
 
-const sortFunctionDown = (arr: product[], sorter: string) => {
-    return arr.slice().sort((a: product, b: product) => {
+const sortFunctionDown = (
+    arr: product[] | (product | undefined)[],
+    sorter: string
+) => {
+    return (arr as product[]).slice().sort((a: product, b: product) => {
         return (
             (b[sorter as keyof typeof b] as number) -
             (a[sorter as keyof typeof a] as number)
@@ -194,47 +194,42 @@ export const createSorting = () => {
 
     searchInput.addEventListener('input', function () {
         const val = this.value.trim();
-        console.log(val);
-        // let cards = document.querySelectorAll('.card');
         const reg = new RegExp(val, 'gi');
-        if (val != '') {
-            const finedArray: (product | undefined)[] = [];
-            filteredArray.forEach((product: product) => {
+        if (val !== '') {
+            finedArray = [];
+            base.products.forEach((product: product) => {
                 if (
                     product.brand.search(reg) !== -1 ||
                     product.category.search(reg) !== -1 ||
                     product.description.search(reg) !== -1 ||
-                    product.title.search(reg) !== -1
+                    product.title.search(reg) !== -1 ||
+                    (product.price + '').search(reg) !== -1 ||
+                    (product.rating + '').search(reg) !== -1 ||
+                    (product.discountPercentage + '').search(reg) !== -1
                 ) {
                     finedArray.push(product);
                 }
             });
-            // cards.forEach((card: Element) => {
-            //     if (card instanceof HTMLDivElement) {
-            //         if(card.innerText.search(reg) !== -1) {
-            //             finedArray.push(base.products.find((item) => item.id === +card.dataset.artikul!));
-            //         }
 
-            //         // if(card.innerText.search(reg) == -1) {
-            //         //     card.classList.add('hide');
-            //         // }
-            //         // else {
-            //         //     card.classList.remove('hide');
-            //         // }
-            //     }
-            // })
-            createGoodsCards(finedArray);
+            if (finedArray.length !== 0) {
+                resultArr = finedArray.filter(function (v) {
+                    if (v) {
+                        return filteredArray.some(function (v2) {
+                            return v.id == v2.id;
+                        });
+                    }
+                });
+            } else if (val.length !== 0) {
+                resultArr = [];
+            } else {
+                resultArr = finedArray;
+            }
+            createGoodsCards(resultArr);
         } else {
-            createGoodsCards(filteredArray);
+            finedArray = [];
+            resultArr = filteredArray;
+            createGoodsCards(resultArr);
         }
-        // else {
-        //     cards.forEach((card) => {
-        //         card.classList.remove('hide');
-        //     })
-        // }
-        // filteredArray = document.querySelectorAll('.card');
-        // console.log(filteredArray);
-        // countGoods.textContent = `COUNT:${goodsNumber()}`;
     });
 
     const sortBlock = document.createElement('div');
@@ -250,11 +245,11 @@ export const createSorting = () => {
     const sortButtons = document.querySelectorAll('.sort__button');
     sortButtons[0].innerHTML = 'Price ascending';
     sortButtons[0].addEventListener('click', () => {
-        return createGoodsCards(sortFunctionUp(filteredArray, 'price'));
+        return createGoodsCards(sortFunctionUp(resultArr, 'price'));
     });
     sortButtons[1].innerHTML = 'Price descending';
     sortButtons[1].addEventListener('click', () => {
-        return createGoodsCards(sortFunctionDown(filteredArray, 'price'));
+        return createGoodsCards(sortFunctionDown(resultArr, 'price'));
     });
 
     // Create filter block
@@ -490,34 +485,68 @@ export const createSorting = () => {
         const priceMin = (<HTMLInputElement>(
             document.querySelector('.price-min')
         )).value;
-        console.log(priceMin);
+        console.log(priceMin, 'priceMin');
 
         const priceMax = (<HTMLInputElement>(
             document.querySelector('.price-max')
         )).value;
+        console.log(priceMax, 'priceMax');
 
         const stockMin = (<HTMLInputElement>(
             document.querySelector('.stock-min')
         )).value;
+        console.log(stockMin, 'stockMin');
 
         const stockMax = (<HTMLInputElement>(
             document.querySelector('.stock-max')
         )).value;
+        console.log(stockMax, 'stockMax');
 
-        filteredArray = base.products.filter((n: product) => {
-            return (
-                (!category.length || category.includes(n.category)) &&
-                (!brand.length || brand.includes(n.brand)) &&
-                (!priceMin || +priceMin <= n.price) &&
-                (!priceMax || +priceMax >= n.price) &&
-                (!stockMin || +stockMin <= n.stock) &&
-                (!stockMax || +stockMax >= n.stock)
+        if (
+            category.length === 0 &&
+            brand.length === 0 &&
+            +priceMin === 10 &&
+            +priceMin === 10 &&
+            +priceMax === 1749 &&
+            +stockMin === 2 &&
+            +stockMax === 150
+        ) {
+            filteredArray = base.products;
+        } else {
+            filteredArray = (base.products as product[]).filter(
+                (n: product) => {
+                    return (
+                        (!category.length || category.includes(n.category)) &&
+                        (!brand.length || brand.includes(n.brand)) &&
+                        (!priceMin || +priceMin <= n.price) &&
+                        (!priceMax || +priceMax >= n.price) &&
+                        (!stockMin || +stockMin <= n.stock) &&
+                        (!stockMax || +stockMax >= n.stock)
+                    );
+                }
             );
-        });
+        }
 
-        createGoodsCards(filteredArray);
+        if (
+            resultArr.length === 0 &&
+            finedArray.length === 0 &&
+            filteredArray.length === 0
+        ) {
+            resultArr = [];
+        } else if (finedArray.length !== 0) {
+            resultArr = finedArray.filter(function (v) {
+                if (v) {
+                    return filteredArray.some(function (v2) {
+                        return v.id == v2.id;
+                    });
+                }
+            });
+        } else {
+            resultArr = filteredArray;
+        }
+
+        createGoodsCards(resultArr);
     };
-    console.log(filterGoods());
     filterBlock.addEventListener('input', () => {
         return filterGoods();
     });
