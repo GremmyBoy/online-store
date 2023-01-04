@@ -232,6 +232,7 @@ export const createSorting = () => {
         }
     });
 
+
     const sortBlock = document.createElement('div');
     sortBlock.classList.add('sort__block');
     sorting.append(sortBlock);
