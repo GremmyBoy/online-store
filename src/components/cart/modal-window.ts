@@ -1,19 +1,21 @@
 const main = document.querySelector('main');
 
 class ModalWindow {
-
     public openModalWindow = () => {
         let modalWindow: HTMLDivElement;
-        if (document.querySelector('.modal-window')) {
-            modalWindow = document.querySelector('.modal-window')!;
-            document.querySelector('.modal-window')!.innerHTML = '';
+        const modalWindowFromPage = document.querySelector('.modal-window');
+        if (modalWindowFromPage) {
+            modalWindow = document.querySelector(
+                '.modal-window'
+            ) as HTMLDivElement;
+            modalWindowFromPage.innerHTML = '';
         } else {
             modalWindow = document.createElement('div');
             modalWindow.classList.add('modal-window');
             main?.append(modalWindow);
         }
         modalWindow.style.display = 'flex';
-    
+
         modalWindow.innerHTML = `<form class="modal-window__form form" action="" novalidate>
         <div class="person__details form__details">
             <h2 class="title">Personal details</h2>
@@ -37,32 +39,38 @@ class ModalWindow {
                     <div class="cvv"> CVV: 
                         <input type="text" placeholder="Code" required></div>
                 </div></div></div>
-        <input type="Submit" class="btn btn-buy" value="Pay Now"></form>`
-    
+        <input type="Submit" class="btn btn-buy" value="Pay Now"></form>`;
+
         this.backdropOpenClose(true);
-    }
-    
+    };
+
     private closeModalWindow = () => {
-      let modalWindow: HTMLDivElement = document.querySelector('.modal-window')!;
-      modalWindow.style.display = 'none';
-    }
+        const modalWindow = document.querySelector('.modal-window');
+        if (modalWindow && modalWindow instanceof HTMLDivElement) {
+            modalWindow.style.display = 'none';
+        }
+    };
 
     private backdropOpenClose = (condition: boolean) => {
-        let backdrop: HTMLDivElement;
+        let backdrop: HTMLDivElement | null;
         if (document.querySelector('.backdrop')) {
-          backdrop = document.querySelector('.backdrop')!;
+            backdrop = document.querySelector('.backdrop');
         } else {
-          backdrop = document.createElement('div');
-          backdrop.classList.add('backdrop');
-          document.body.append(backdrop);
-          backdrop.addEventListener('click', () => {
-            this.closeModalWindow();
-            this.backdropOpenClose(false);
-          });
+            backdrop = document.createElement('div');
+            backdrop.classList.add('backdrop');
+            document.body.append(backdrop);
+            backdrop.addEventListener('click', () => {
+                this.closeModalWindow();
+                this.backdropOpenClose(false);
+            });
         }
-      
-        condition ? backdrop.style.display = 'block' : backdrop.style.display = 'none';
-      }
+
+        if (backdrop) {
+            condition
+                ? (backdrop.style.display = 'block')
+                : (backdrop.style.display = 'none');
+        }
+    };
 }
 
-export const modal: ModalWindow = new ModalWindow;
+export const modal: ModalWindow = new ModalWindow();

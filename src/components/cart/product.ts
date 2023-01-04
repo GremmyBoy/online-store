@@ -1,12 +1,13 @@
-import { cart } from "./index";
+import { cart } from './index';
 
 class Product {
     public deleteProduct = (id: string, price: number) => {
         cart.contents.amount = cart.contents.amount - cart.contents[id];
-        cart.contents.totalPrice = cart.contents.totalPrice - (cart.contents[id] * price);
+        cart.contents.totalPrice =
+            cart.contents.totalPrice - cart.contents[id] * price;
         delete cart.contents[id];
         this.updateProducts();
-    }
+    };
 
     public minusProduct = (id: string, price: number) => {
         cart.contents.amount = cart.contents.amount - 1;
@@ -17,7 +18,7 @@ class Product {
         } else {
             this.updateProducts();
         }
-    }
+    };
 
     public plusProduct = (id: string, stock: string, price: number) => {
         if (cart.contents[id] >= +stock) {
@@ -28,14 +29,14 @@ class Product {
             cart.contents[id]++;
             this.updateProducts();
         }
-    }
+    };
 
     private updateProducts = () => {
         cart.changeCartAmount();
         cart.changeTotalPrice();
         cart.openCart();
         localStorage.setItem('cart', JSON.stringify(cart.contents));
-    }
+    };
 }
 
 export const productInCart: Product = new Product();
