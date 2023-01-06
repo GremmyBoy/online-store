@@ -2,6 +2,7 @@ import './../../libs/reset.css';
 import './style.css';
 import { cart } from '../cart/index';
 import { base } from '../goodsBase';
+import { productPage } from '../productPage/index';
 
 export interface product {
     id: number;
@@ -91,7 +92,7 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
             card.dataset.artikul = product.id + '';
             card.addEventListener('click', (e) => {
                 if (!(e.target as HTMLElement).classList.contains('btn')) {
-                    console.log(`click to product ${product.id} `);
+                    productPage.openProductPage(product.id);
                 }
             });
             goodsConteiner.append(card);
@@ -231,7 +232,6 @@ export const createSorting = () => {
             createGoodsCards(resultArr);
         }
     });
-
 
     const sortBlock = document.createElement('div');
     sortBlock.classList.add('sort__block');

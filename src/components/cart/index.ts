@@ -31,6 +31,12 @@ class Cart {
         }
     };
 
+    public changeRouteToCart = () => {
+        const { origin } = new URL(window.location.href);
+        const newUrl = new URL(origin + `/cart`);
+        window.history.pushState({}, '', newUrl);
+    };
+
     public changeTotalPrice = () => {
         if (allPrice != undefined) {
             if (!this.contents.totalPrice) {
@@ -55,6 +61,7 @@ class Cart {
     };
 
     public openCart = () => {
+        this.changeRouteToCart();
         if (main) {
             main.innerHTML = '';
         }
