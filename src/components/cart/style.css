@@ -155,7 +155,8 @@ input[type='email'] {
   color: gray;
 }
 
-.btn-buy {
+.btn-buy,
+.btn-pay {
   width: 80%;
   align-self: center;
   height: 40px;

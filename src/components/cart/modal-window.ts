@@ -1,3 +1,7 @@
+import { cart } from '.';
+import { createSorting, createGoodsCards } from '../mainPage';
+import { base } from '../goodsBase';
+
 const main = document.querySelector('main');
 
 class ModalWindow {
@@ -46,11 +50,14 @@ class ModalWindow {
                         <input class="input__cvv" type="text" placeholder="Code" required>
                         <p class="error">Error</p></div>
                 </div></div></div>
-        <input type="Submit" class="btn btn-buy" value="Pay Now"></form>`;
+        <input type="submit" class="btn btn-pay" value="Pay Now"></form>`;
 
         this.backdropOpenClose(true);
 
+        const inputs: (Element | null)[] = [];
+
         const inputName = document.querySelector('.input__name');
+        inputs.push(inputName);
         inputName?.addEventListener('input', () => {
             const valueArr = (inputName as HTMLInputElement).value
                 .trim()
@@ -66,6 +73,7 @@ class ModalWindow {
         });
 
         const inputPhone = document.querySelector('.input__phone');
+        inputs.push(inputPhone);
         inputPhone?.addEventListener('input', () => {
             const value = (inputPhone as HTMLInputElement).value.trim();
             const regExp = /^(\+)\d{9,}$/;
@@ -77,6 +85,7 @@ class ModalWindow {
         });
 
         const inputAdress = document.querySelector('.input__adress');
+        inputs.push(inputAdress);
         inputAdress?.addEventListener('input', () => {
             const valueArr = (inputAdress as HTMLInputElement).value
                 .trim()
@@ -92,6 +101,7 @@ class ModalWindow {
         });
 
         const inputEmail = document.querySelector('.input__email');
+        inputs.push(inputEmail);
         inputEmail?.addEventListener('input', () => {
             const value = (inputEmail as HTMLInputElement).value.trim();
             const regExp =
@@ -104,6 +114,7 @@ class ModalWindow {
         });
 
         const inputCard = document.querySelector('.input__card');
+        inputs.push(inputCard);
         inputCard?.addEventListener('input', () => {
             if (!/^\d+$/.test((inputCard as HTMLInputElement).value)) {
                 (inputCard as HTMLInputElement).value = (
@@ -125,20 +136,31 @@ class ModalWindow {
         });
 
         const inputDate = document.querySelector('.input__date');
+        inputs.push(inputDate);
         inputDate?.addEventListener('input', () => {
-            if (!/^\d+$/.test((inputDate as HTMLInputElement).value)) {
-                (inputDate as HTMLInputElement).value = (
-                    inputDate as HTMLInputElement
-                ).value.slice(0, -1);
-            }
-            if ((inputDate as HTMLInputElement).value.length > 4) {
-                (inputDate as HTMLInputElement).value = (
-                    inputDate as HTMLInputElement
-                ).value.slice(0, 4);
-            }
-            const value = (inputDate as HTMLInputElement).value;
-            const regExp = /^\d{4}$/;
-            if (regExp.test(value)) {
+            const valueArr = (inputDate as HTMLInputElement).value
+                .split('')
+                .map((item, index) => {
+                    if (/^\d$/.test(item) && index < 5) {
+                        return item;
+                    } else {
+                        return '';
+                    }
+                });
+
+            const value = valueArr
+                .map((item, index) => {
+                    if (index === 1 && valueArr.length > 2) {
+                        return item + '/';
+                    } else {
+                        return item;
+                    }
+                })
+                .join('');
+
+            (inputDate as HTMLInputElement).value = value;
+
+            if (value.length === 5 && +(value[0] + value[1]) <= 12) {
                 inputDate.classList.remove('invalid');
             } else {
                 inputDate.classList.add('invalid');
@@ -146,6 +168,7 @@ class ModalWindow {
         });
 
         const inputCVV = document.querySelector('.input__cvv');
+        inputs.push(inputCVV);
         inputCVV?.addEventListener('input', () => {
             if (!/^\d+$/.test((inputCVV as HTMLInputElement).value)) {
                 (inputCVV as HTMLInputElement).value = (
@@ -163,6 +186,43 @@ class ModalWindow {
                 inputCVV.classList.remove('invalid');
             } else {
                 inputCVV.classList.add('invalid');
+            }
+        });
+
+        const btnBuy = document.querySelector('.btn-pay');
+        btnBuy?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const validInputs: Element[] = [];
+            inputs.map((input) => {
+                if (
+                    (input as HTMLInputElement).value === '' ||
+                    (input as HTMLInputElement).classList.contains('invalid')
+                ) {
+                    input?.classList.add('invalid');
+                } else {
+                    if (input) validInputs.push(input);
+                }
+            });
+
+            if (validInputs.length === 3) {
+                const modal = document.querySelector('.modal-window');
+                if (modal) {
+                    modal.innerHTML = 'Thanks for your order!';
+                    cart.cleanCart();
+
+                    setTimeout(() => {
+                        this.closeModalWindow();
+                        this.backdropOpenClose(false);
+                        if (main) main.innerHTML = '';
+                        createSorting();
+                        createGoodsCards(base.products);
+
+                        const cartIco = document.querySelector('.header__cart');
+                        cartIco?.addEventListener('click', () => {
+                            cart.openCart();
+                        });
+                    }, 3000);
+                }
             }
         });
     };

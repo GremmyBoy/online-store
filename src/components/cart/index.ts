@@ -55,6 +55,10 @@ class Cart {
     };
 
     public openCart = () => {
+        const { origin } = new URL(window.location.href);
+        const newUrl = new URL(origin + `/cart`);
+        window.history.pushState({}, '', newUrl);
+
         if (main) {
             main.innerHTML = '';
         }
@@ -72,7 +76,7 @@ class Cart {
             main?.append(cartConteiner);
         }
 
-        if (this.contents.amount === 0) {
+        if (this.contents.amount === 0 || !this.contents.amount) {
             if (main) {
                 main.innerHTML = 'Cart is Empty';
             }
@@ -240,6 +244,14 @@ class Cart {
         this.changeCartAmount();
         this.changeTotalPrice();
 
+        localStorage.setItem('cart', JSON.stringify(this.contents));
+    };
+
+    public cleanCart = () => {
+        this.contents = {};
+
+        this.changeCartAmount();
+        this.changeTotalPrice();
         localStorage.setItem('cart', JSON.stringify(this.contents));
     };
 }

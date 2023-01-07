@@ -17,11 +17,6 @@ const handleLocation = () => {
 
         const cartIco = document.querySelector('.header__cart');
         cartIco?.addEventListener('click', () => {
-            const { origin } = new URL(window.location.href);
-            console.log(origin);
-            const newUrl = new URL(origin + `/cart`);
-            console.log(newUrl);
-            window.history.pushState({}, '', newUrl);
             cart.openCart();
         });
     } else if (path === '/cart') {
