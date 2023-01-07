@@ -125,11 +125,23 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
             btn.classList.add('btn');
             btn.classList.add('btn__toCart');
             btn.dataset.artikul = product.id + '';
-            btn.addEventListener('click', () => {
-                cart.addToCart(product.id, product.price);
-                console.log(`add product ${product.id} to cart `);
+            cart.contents[product.id]
+                ? (btn.textContent = 'Drop from cart')
+                : (btn.textContent = 'To cart');
+
+            btn.addEventListener('click', (e) => {
+                if ((e.target as HTMLElement).textContent === 'To cart') {
+                    if (product.price) {
+                        cart.addToCart(product.id, product.price);
+                    }
+                    (e.target as HTMLElement).textContent = 'Drop from cart';
+                } else {
+                    if (product.price) {
+                        cart.removeFromCart(product.id, product.price);
+                    }
+                    (e.target as HTMLElement).textContent = 'To cart';
+                }
             });
-            btn.textContent = 'to cart';
             card.append(btn);
         }
     });

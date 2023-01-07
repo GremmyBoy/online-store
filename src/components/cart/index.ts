@@ -244,9 +244,22 @@ class Cart {
         this.contents.totalPrice
             ? (this.contents.totalPrice = this.contents.totalPrice + price)
             : (this.contents.totalPrice = price);
+
+        this.updateCart();
+    };
+
+    public removeFromCart = (id: number, price: number) => {
+        this.contents.amount = this.contents.amount - this.contents[id];
+        this.contents.totalPrice =
+            this.contents.totalPrice - this.contents[id] * price;
+        delete this.contents[id];
+
+        this.updateCart();
+    };
+
+    public updateCart = () => {
         this.changeCartAmount();
         this.changeTotalPrice();
-
         localStorage.setItem('cart', JSON.stringify(this.contents));
     };
 }

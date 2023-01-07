@@ -47,22 +47,35 @@ class ProductPage {
                 <span>${currentProduct?.rating}</span></li><li>
                 <span class="info_bold">Stock: </span>
                 <span>${currentProduct?.stock}</span></li></ul></div><div class="product__buy-block">
-        <p>$${currentProduct?.price}.00</p><button class="btn btn__toCart">TO CART</button>
+        <p>$${currentProduct?.price}.00</p><button class="btn btn__toCart"></button>
         <button class="btn btn__buy-now">BUY NOW</button></div>`;
 
-        document
-            .querySelector('.btn__toCart')
-            ?.addEventListener('click', () => {
+        const btnToCart = document.querySelector('.btn__toCart');
+        cart.contents[id]
+            ? ((btnToCart as HTMLElement).textContent = 'Drop from cart')
+            : ((btnToCart as HTMLElement).textContent = 'To cart');
+
+        btnToCart?.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).textContent === 'To cart') {
                 if (currentProduct?.price) {
                     cart.addToCart(id, currentProduct?.price);
                 }
-            });
+                (e.target as HTMLElement).textContent = 'Drop from cart';
+            } else {
+                if (currentProduct?.price) {
+                    cart.removeFromCart(id, currentProduct?.price);
+                }
+                (e.target as HTMLElement).textContent = 'To cart';
+            }
+        });
 
         document
             .querySelector('.btn__buy-now')
             ?.addEventListener('click', () => {
-                if (currentProduct?.price) {
-                    cart.addToCart(id, currentProduct?.price);
+                if (!cart.contents[id]) {
+                    if (currentProduct?.price) {
+                        cart.addToCart(id, currentProduct?.price);
+                    }
                 }
                 cart.openCart();
                 modal.openModalWindow();
