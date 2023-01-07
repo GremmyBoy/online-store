@@ -140,7 +140,7 @@
 input[type='text'],
 input[type='email'] {
     background-color: #E1E8EE;
-    width: 90%;
+    width: 100%;
     border-radius: 6px;
     padding: 0.4rem;
     text-align: center;
@@ -225,10 +225,11 @@ input[type='email'] {
 }
 
 .form__item {
-  width: 100%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 15px;
 }
 
 .backdrop {
@@ -242,6 +243,15 @@ input[type='email'] {
   transition: .5s;
   cursor: pointer;
 }
+
+.error {
+  display: none;
+}
+
+.invalid + .error {
+  display: block;
+}
+
 
 
   @media (max-width: 800px) {
