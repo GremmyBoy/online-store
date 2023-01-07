@@ -39,7 +39,7 @@ class ModalWindow {
             <h2 class="title">Credit card details</h2>
             <div class="credit-card">
                 <div class="card__number">
-                    <img src="../../assets/card.png" alt="card">
+                    <img class="card__img" src="../../assets/card.png" alt="card">
                     <input class="input__card" type="text" placeholder="Card number" required>
                     <p class="error">Error</p></div>
                 <div class="card__info">
@@ -114,6 +114,7 @@ class ModalWindow {
         });
 
         const inputCard = document.querySelector('.input__card');
+        const cardImg = document.querySelector('.card__img');
         inputs.push(inputCard);
         inputCard?.addEventListener('input', () => {
             if (!/^\d+$/.test((inputCard as HTMLInputElement).value)) {
@@ -127,6 +128,19 @@ class ModalWindow {
                 ).value.slice(0, 16);
             }
             const value = (inputCard as HTMLInputElement).value;
+
+            if (cardImg instanceof HTMLImageElement) {
+                if (value[0] === '4') {
+                    cardImg.src = '../../assets/visa.png';
+                } else if (value[0] === '5') {
+                    cardImg.src = '../../assets/master.png';
+                } else if (value[0] === '6') {
+                    cardImg.src = '../../assets/union.png';
+                } else {
+                    cardImg.src = '../../assets/card.png';
+                }
+            }
+
             const regExp = /^\d{16}$/;
             if (regExp.test(value)) {
                 inputCard.classList.remove('invalid');
@@ -204,7 +218,7 @@ class ModalWindow {
                 }
             });
 
-            if (validInputs.length === 3) {
+            if (validInputs.length === 7) {
                 const modal = document.querySelector('.modal-window');
                 if (modal) {
                     modal.innerHTML = 'Thanks for your order!';
