@@ -18,6 +18,9 @@ export interface product {
     images: string[];
 }
 
+const { origin } = new URL(window.location.href);
+const newUrl = new URL(origin);
+
 const main = document.querySelector('main');
 let filteredArray: product[];
 let finedArray: (product | undefined)[] = [];
@@ -69,11 +72,38 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
     }
 
     const searchInputBlock = document.createElement('div');
-    searchInputBlock.classList.add('search__block');
+    searchInputBlock.classList.add('view__block');
     products?.append(searchInputBlock);
 
+    const viewMode = document.createElement('div');
+    viewMode.classList.add('view__mode');
+    searchInputBlock.append(viewMode);
+
+    const smallView = document.createElement('div');
+    smallView.classList.add('small__view');
+    viewMode.append(smallView);
+
+    const bigView = document.createElement('div');
+    bigView.classList.add('big__view');
+    viewMode.append(bigView);
+
+
+    for (let i = 0; i < 36; i++) {
+        const point = document.createElement('div');
+        point.classList.add('point');
+        point.innerHTML = '.';
+        smallView.append(point);
+    }
+
+    for (let i = 0; i < 16; i++) {
+        const bigpoint = document.createElement('div');
+        bigpoint.classList.add('big-point');
+        bigpoint.innerHTML = '.';
+        bigView.append(bigpoint);
+    }
+
     let goodsConteiner: HTMLDivElement;
-    const goodsConteinerFromPage = document.querySelector('.goods__conteine');
+    const goodsConteinerFromPage = document.querySelector('.goods__conteiner');
     if (goodsConteinerFromPage) {
         goodsConteiner = document.querySelector(
             '.goods__conteiner'
@@ -146,6 +176,39 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
         }
     });
 
+    const cards = document.querySelectorAll('.card');
+    const cardDesc = document.querySelectorAll('.card__description');
+
+    smallView.addEventListener('click', () => {
+        if (bigView.classList.contains('active')) {
+            bigView.classList.remove('active');
+        }
+        smallView.classList.add('active');
+        cards.forEach((card) => {
+            card.classList.add('active');
+        });
+        cardDesc.forEach((card) => {
+            card.classList.add('active');
+        });
+        newUrl.searchParams.set('view', `small`);
+        window.history.pushState({}, '', newUrl);
+    });
+
+    bigView.addEventListener('click', () => {
+        bigView.classList.add('active');
+        if (smallView.classList.contains('active')) {
+            smallView.classList.remove('active');
+            cards.forEach((card) => {
+                card.classList.remove('active');
+            });
+            cardDesc.forEach((card) => {
+                card.classList.remove('active');
+            });
+        }
+        newUrl.searchParams.set('view', `big`);
+        window.history.pushState({}, '', newUrl);
+    });
+
     const countGoods = document.createElement('p');
     countGoods.classList.add('count__goods');
     countGoods.textContent = `COUNT:${goodsNumber()}`;
@@ -201,14 +264,21 @@ export const createSorting = () => {
     sorting.classList.add('sorting__conteiner');
     main?.append(sorting);
 
+    const searchFormBlock = document.createElement('div');
+    searchFormBlock.classList.add('search__form');
+    sorting.append(searchFormBlock);
+
     const searchInput = document.createElement('input');
     searchInput.classList.add('search__input');
-    sorting.append(searchInput);
+    searchInput.setAttribute('placeholder', 'Search...');
+    searchFormBlock.append(searchInput);
 
     searchInput.addEventListener('input', function () {
         const val = this.value.trim();
         const reg = new RegExp(val, 'gi');
         if (val !== '') {
+            newUrl.searchParams.set('search', `${val}`);
+            window.history.pushState({}, '', newUrl);
             finedArray = [];
             base.products.forEach((product: product) => {
                 if (
@@ -239,6 +309,8 @@ export const createSorting = () => {
             }
             createGoodsCards(resultArr);
         } else {
+            newUrl.searchParams.delete('search');
+            window.history.pushState({}, '', newUrl);
             finedArray = [];
             resultArr = filteredArray;
             createGoodsCards(resultArr);
@@ -249,7 +321,7 @@ export const createSorting = () => {
     sortBlock.classList.add('sort__block');
     sorting.append(sortBlock);
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 4; i++) {
         const sortButton = document.createElement('button');
         sortButton.classList.add('sort__button');
         sortBlock.append(sortButton);
@@ -258,12 +330,32 @@ export const createSorting = () => {
     const sortButtons = document.querySelectorAll('.sort__button');
     sortButtons[0].innerHTML = 'Price ascending';
     sortButtons[0].addEventListener('click', () => {
+        newUrl.searchParams.set('sort', `price-Asc`);
+        window.history.pushState({}, '', newUrl);
         return createGoodsCards(sortFunctionUp(resultArr, 'price'));
     });
+
     sortButtons[1].innerHTML = 'Price descending';
     sortButtons[1].addEventListener('click', () => {
+        newUrl.searchParams.set('sort', `price-Desc`);
+        window.history.pushState({}, '', newUrl);
         return createGoodsCards(sortFunctionDown(resultArr, 'price'));
     });
+
+    sortButtons[2].innerHTML = 'Rating ascending';
+    sortButtons[2].addEventListener('click', () => {
+        newUrl.searchParams.set('sort', `rating-Asc`);
+        window.history.pushState({}, '', newUrl);
+        return createGoodsCards(sortFunctionUp(resultArr, 'rating'));
+    });
+
+    sortButtons[3].innerHTML = 'Rating descending';
+    sortButtons[3].addEventListener('click', () => {
+        newUrl.searchParams.set('sort', `rating-Desc`);
+        window.history.pushState({}, '', newUrl);
+        return createGoodsCards(sortFunctionDown(resultArr, 'rating'));
+    });
+
 
     // Create filter block
 
@@ -276,6 +368,7 @@ export const createSorting = () => {
 
     const categoryBlock = document.createElement('div');
     categoryBlock.classList.add('category__block');
+    categoryBlock.setAttribute('id', 'category');
     filterBlock.append(categoryBlock);
 
     const categoryTitle = document.createElement('h2');
@@ -306,6 +399,7 @@ export const createSorting = () => {
 
     const brandBlock = document.createElement('div');
     brandBlock.classList.add('brand__block');
+    brandBlock.setAttribute('id', 'brand');
     filterBlock.append(brandBlock);
 
     const brandTitle = document.createElement('h2');
@@ -336,6 +430,7 @@ export const createSorting = () => {
 
     const priceBlock = document.createElement('div');
     priceBlock.classList.add('price__block');
+    priceBlock.setAttribute('id', 'price');
     filterBlock.append(priceBlock);
 
     const priceTitle = document.createElement('h2');
@@ -412,6 +507,7 @@ export const createSorting = () => {
 
     const stockBlock = document.createElement('div');
     stockBlock.classList.add('stock__block');
+    stockBlock.setAttribute('id', 'stock');
     filterBlock.append(stockBlock);
 
     const stockTitle = document.createElement('h2');
@@ -488,32 +584,27 @@ export const createSorting = () => {
         const category = [
             ...document.querySelectorAll('.category__list input:checked'),
         ].map((n: Element) => (n as HTMLInputElement).value);
-        console.log(category);
 
         const brand = [
             ...document.querySelectorAll('.brand__list input:checked'),
         ].map((v: Element) => (v as HTMLInputElement).value);
-        console.log(brand);
+
 
         const priceMin = (<HTMLInputElement>(
             document.querySelector('.price-min')
         )).value;
-        console.log(priceMin, 'priceMin');
 
         const priceMax = (<HTMLInputElement>(
             document.querySelector('.price-max')
         )).value;
-        console.log(priceMax, 'priceMax');
 
         const stockMin = (<HTMLInputElement>(
             document.querySelector('.stock-min')
         )).value;
-        console.log(stockMin, 'stockMin');
 
         const stockMax = (<HTMLInputElement>(
             document.querySelector('.stock-max')
         )).value;
-        console.log(stockMax, 'stockMax');
 
         if (
             category.length === 0 &&
@@ -558,9 +649,84 @@ export const createSorting = () => {
             resultArr = filteredArray;
         }
 
+        if (category.length !== 0) {
+            newUrl.searchParams.set('category', `${category}`);
+            window.history.pushState({}, '', newUrl);
+        }
+        else {
+            newUrl.searchParams.delete('category');
+            window.history.pushState({}, '', newUrl);
+        }
+
+        if (brand.length !== 0) {
+            newUrl.searchParams.set('brand', `${brand}`);
+            window.history.pushState({}, '', newUrl);
+        }
+        else {
+            newUrl.searchParams.delete('brand');
+            window.history.pushState({}, '', newUrl);
+        }
+
+        if (+priceMin > 10 || +priceMax < 1749) {
+            newUrl.searchParams.set('price', `${priceMin}↕${priceMax}`);
+            window.history.pushState({}, '', newUrl);
+        }
+        else {
+            newUrl.searchParams.delete('price');
+            window.history.pushState({}, '', newUrl);
+        }
+
+        if (+stockMin > 2 || +stockMax < 150) {
+            newUrl.searchParams.set('stock', `${stockMin}↕${stockMax}`);
+            window.history.pushState({}, '', newUrl);
+        }
+        else {
+            newUrl.searchParams.delete('stock');
+            window.history.pushState({}, '', newUrl);
+        }
+
         createGoodsCards(resultArr);
     };
     filterBlock.addEventListener('input', () => {
+        // if (e?.target as HTMLInputElement && e?.target !== null && e !== null && e.currentTarget !== null && e.currentTarget as HTMLDivElement) {
+        //     e.preventDefault();
+        //     const { origin } = new URL(window.location.href);
+        //     console.log(origin);
+        //     const catVal = (<HTMLDivElement>e.target).parentNode?.parentNode;
+        //     const idVal = (<HTMLDivElement>catVal).id;
+        //     console.log(idVal);
+        //     const val = (<HTMLInputElement>e.target).value;
+
+        //     const priceMin = (<HTMLInputElement>(
+        //         document.querySelector('.price-min')
+        //     )).value;
+        //     console.log(`input=${priceMin}`);
+
+        //     const priceMax = (<HTMLInputElement>(
+        //         document.querySelector('.price-max')
+        //     )).value;
+        //     console.log(priceMax, 'priceMax');
+        //     let newUrl = new URL(origin + `?${idVal}=${val}`);
+
+        //     if ((<HTMLInputElement>e.target).classList.contains('price-min') || (<HTMLInputElement>e.target).classList.contains('price-max')) {
+        //         newUrl = new URL(origin + `?${idVal}=${priceMin}↕${priceMax}`);
+        //     }
+
+        //     const stockMin = (<HTMLInputElement>(
+        //         document.querySelector('.stock-min')
+        //     )).value;
+
+        //     const stockMax = (<HTMLInputElement>(
+        //         document.querySelector('.stock-max')
+        //     )).value;
+
+        //     if ((<HTMLInputElement>e.target).classList.contains('stock-min') || (<HTMLInputElement>e.target).classList.contains('stock-max')) {
+        //         newUrl = new URL(origin + `?${idVal}=${stockMin}↕${stockMax}`);
+        //     }
+        //     console.log(newUrl);
+        //     window.history.pushState({}, '', newUrl);
+        // }
+
         return filterGoods();
     });
 };
