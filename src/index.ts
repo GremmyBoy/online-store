@@ -6,12 +6,11 @@ import { cart } from './components/cart/index';
 import { productPage } from './components/productPage';
 import { LibManifestPlugin } from 'webpack';
 
-// const validPaths = ['', '/', '/cart', '/product'];
 const handleLocation = () => {
-    const path = window.location.pathname;
-    console.log(path);
+    const path = window.location.pathname.split('/');
+    const newPath = path[path.length - 1];
 
-    if (path === '/' || path === '') {
+    if (newPath === '/' || newPath === '') {
         const main = document.querySelector('main');
         if (main) main.innerHTML = '';
         createSorting();
@@ -22,11 +21,11 @@ const handleLocation = () => {
         cartIco?.addEventListener('click', () => {
             cart.openCart();
         });
-    } else if (path === '/cart') {
+    } else if (newPath === 'cart') {
         cart.checkCart();
         cart.openCart();
-    } else if (path.includes('/product')) {
-        const id: number = +path.slice(8);
+    } else if (newPath.includes('product')) {
+        const id: number = +newPath.slice(7);
 
         if (id >= 1 && id <= 100) {
             productPage.openProductPage(id);
