@@ -2,6 +2,7 @@ import './../../libs/reset.css';
 import './style.css';
 import { cart } from '../cart/index';
 import { base } from '../goodsBase';
+import { productPage } from '../productPage/index';
 
 export interface product {
     id: number;
@@ -121,7 +122,7 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
             card.dataset.artikul = product.id + '';
             card.addEventListener('click', (e) => {
                 if (!(e.target as HTMLElement).classList.contains('btn')) {
-                    console.log(`click to product ${product.id} `);
+                    productPage.openProductPage(product.id);
                 }
             });
             goodsConteiner.append(card);
@@ -154,11 +155,23 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
             btn.classList.add('btn');
             btn.classList.add('btn__toCart');
             btn.dataset.artikul = product.id + '';
-            btn.addEventListener('click', () => {
-                cart.addToCart(product.id, product.price);
-                console.log(`add product ${product.id} to cart `);
+            cart.contents[product.id]
+                ? (btn.textContent = 'Drop from cart')
+                : (btn.textContent = 'To cart');
+
+            btn.addEventListener('click', (e) => {
+                if ((e.target as HTMLElement).textContent === 'To cart') {
+                    if (product.price) {
+                        cart.addToCart(product.id, product.price);
+                    }
+                    (e.target as HTMLElement).textContent = 'Drop from cart';
+                } else {
+                    if (product.price) {
+                        cart.removeFromCart(product.id, product.price);
+                    }
+                    (e.target as HTMLElement).textContent = 'To cart';
+                }
             });
-            btn.textContent = 'to cart';
             card.append(btn);
         }
     });
@@ -303,7 +316,6 @@ export const createSorting = () => {
             createGoodsCards(resultArr);
         }
     });
-
 
     const sortBlock = document.createElement('div');
     sortBlock.classList.add('sort__block');

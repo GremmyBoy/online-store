@@ -31,6 +31,12 @@ class Cart {
         }
     };
 
+    public changeRouteToCart = () => {
+        const { origin } = new URL(window.location.href);
+        const newUrl = new URL(origin + `/cart`);
+        window.history.pushState({}, '', newUrl);
+    };
+
     public changeTotalPrice = () => {
         if (allPrice != undefined) {
             if (!this.contents.totalPrice) {
@@ -55,6 +61,7 @@ class Cart {
     };
 
     public openCart = () => {
+        this.changeRouteToCart();
         if (main) {
             main.innerHTML = '';
         }
@@ -72,7 +79,7 @@ class Cart {
             main?.append(cartConteiner);
         }
 
-        if (this.contents.amount === 0) {
+        if (this.contents.amount === 0 || !this.contents.amount) {
             if (main) {
                 main.innerHTML = 'Cart is Empty';
             }
@@ -237,9 +244,30 @@ class Cart {
         this.contents.totalPrice
             ? (this.contents.totalPrice = this.contents.totalPrice + price)
             : (this.contents.totalPrice = price);
+
+        this.updateCart();
+    };
+
+    public removeFromCart = (id: number, price: number) => {
+        this.contents.amount = this.contents.amount - this.contents[id];
+        this.contents.totalPrice =
+            this.contents.totalPrice - this.contents[id] * price;
+        delete this.contents[id];
+
+        this.updateCart();
+    };
+
+    public updateCart = () => {
         this.changeCartAmount();
         this.changeTotalPrice();
+        localStorage.setItem('cart', JSON.stringify(this.contents));
+    };
 
+    public cleanCart = () => {
+        this.contents = {};
+
+        this.changeCartAmount();
+        this.changeTotalPrice();
         localStorage.setItem('cart', JSON.stringify(this.contents));
     };
 }

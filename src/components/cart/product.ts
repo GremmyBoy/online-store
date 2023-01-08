@@ -2,11 +2,8 @@ import { cart } from './index';
 
 class Product {
     public deleteProduct = (id: string, price: number) => {
-        cart.contents.amount = cart.contents.amount - cart.contents[id];
-        cart.contents.totalPrice =
-            cart.contents.totalPrice - cart.contents[id] * price;
-        delete cart.contents[id];
-        this.updateProducts();
+        cart.removeFromCart(+id, price);
+        cart.openCart();
     };
 
     public minusProduct = (id: string, price: number) => {
@@ -32,10 +29,8 @@ class Product {
     };
 
     private updateProducts = () => {
-        cart.changeCartAmount();
-        cart.changeTotalPrice();
+        cart.updateCart();
         cart.openCart();
-        localStorage.setItem('cart', JSON.stringify(cart.contents));
     };
 }
 
