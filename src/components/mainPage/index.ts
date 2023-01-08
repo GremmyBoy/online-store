@@ -86,6 +86,7 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
 
     const bigView = document.createElement('div');
     bigView.classList.add('big__view');
+    bigView.classList.add('active');
     viewMode.append(bigView);
 
 
