@@ -18,8 +18,9 @@ export interface product {
     images: string[];
 }
 
-const { origin } = new URL(window.location.href);
-const newUrl = new URL(origin);
+const { origin, pathname } = new URL(window.location.href);
+const newUrl = new URL(pathname, origin);
+console.log(origin, pathname);
 
 const main = document.querySelector('main');
 let filteredArray: product[];
