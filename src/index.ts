@@ -26,8 +26,8 @@ const handleLocation = () => {
     } else if (path === '/cart') {
         cart.checkCart();
         cart.openCart();
-    } else if (path.includes('/product')) {
-        const id: number = +path.slice(8);
+    } else if (path.includes('/product/')) {
+        const id: number = +path.slice(9);
 
         if (id >= 1 && id <= 100) {
             productPage.openProductPage(id);
