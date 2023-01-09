@@ -9,6 +9,8 @@ import { LibManifestPlugin } from 'webpack';
 const handleLocation = () => {
     const path = window.location.pathname.split('/');
     const newPath = path[path.length - 1];
+    console.log(path, 'path');
+    console.log(newPath, 'newPath');
 
     if (newPath === '/' || newPath === '') {
         const main = document.querySelector('main');
@@ -39,6 +41,7 @@ const handleLocation = () => {
             create404();
         }
     } else {
+        console.log('error');
         create404();
     }
 };

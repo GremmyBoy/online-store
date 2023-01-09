@@ -2,6 +2,7 @@ import './style.css';
 import { base } from '../goodsBase';
 import { productInCart } from './product';
 import { modal } from './modal-window';
+import { promo } from './promo';
 
 const cartAmount = document.querySelector('.cart__amoumt');
 const main = document.querySelector('main');
@@ -32,9 +33,16 @@ class Cart {
     };
 
     public changeRouteToCart = () => {
-        const { origin } = new URL(window.location.href);
-        const newUrl = new URL(origin + `/cart`);
-        window.history.pushState({}, '', newUrl);
+        const path = window.location.pathname.split('/');
+        const newPath = path[path.length - 1];
+        if (newPath !== 'cart') {
+            const { origin, pathname } = new URL(window.location.href);
+            console.log(origin, pathname);
+
+            const newUrl = new URL(origin + `${pathname}cart`);
+            console.log(newUrl);
+            window.history.pushState({}, '', newUrl);
+        }
     };
 
     public changeTotalPrice = () => {
@@ -209,11 +217,12 @@ class Cart {
         totalBlock.innerHTML = `<h2 class="title">Summary</h2>
         <div class="totals">
             <p class="subtitle">Products: <span 
-            class="total-cart__amount">${this.contents.amount}
-            </span></p>
-            <p class="subtitle">Total: <span class="total-cart__price">$${this.changeTotalPrice()}</span></p></div>
+            class="total-cart__amount">${this.contents.amount}</span></p>
+            <p class="subtitle">Total: <span class="total-cart__price">$${this.changeTotalPrice()}</span>
+            <span class="total-cart__price_sale"></span></p></div>
             <div class="promo-code__block"><input class="promo-code" type="search" placeholder="Enter promo code">
-            <span>Promo for test: "RS", "EPM"</span></div>`;
+            <div class="promos__block"></div>
+            <span>Promo for test: "RSS", "EPM"</span></div>`;
 
         const btnBuy = document.createElement('button');
         btnBuy.classList.add('btn');
@@ -223,6 +232,8 @@ class Cart {
         btnBuy.addEventListener('click', () => {
             modal.openModalWindow();
         });
+
+        promo.createPromo();
     };
 
     public checkCart = () => {
