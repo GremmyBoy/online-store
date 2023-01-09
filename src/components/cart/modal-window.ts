@@ -132,13 +132,13 @@ class ModalWindow {
 
             if (cardImg instanceof HTMLImageElement) {
                 if (value[0] === '4') {
-                    cardImg.src = '../../assets/visa.png';
+                    cardImg.src = '../assets/visa.png';
                 } else if (value[0] === '5') {
-                    cardImg.src = '../../assets/master.png';
+                    cardImg.src = '../assets/master.png';
                 } else if (value[0] === '6') {
-                    cardImg.src = '../../assets/union.png';
+                    cardImg.src = '../assets/union.png';
                 } else {
-                    cardImg.src = '../../assets/card.png';
+                    cardImg.src = '../assets/card.png';
                 }
             }
 

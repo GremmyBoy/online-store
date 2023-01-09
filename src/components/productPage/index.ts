@@ -5,13 +5,12 @@ import { modal } from '../cart/modal-window';
 
 class ProductPage {
     openProductPage = (id: number) => {
-        const path = window.location.pathname.split('/');
-        const newPath = path[path.length - 1];
-        if (!newPath.includes('product')) {
-            const { origin, pathname } = new URL(window.location.href);
-            console.log(origin, pathname);
+        const path = window.location.pathname;
+        if (!path.includes('/online-store/product')) {
+            const { origin } = new URL(window.location.href);
+            console.log(origin);
 
-            const newUrl = new URL(origin + `${pathname}product${id}`);
+            const newUrl = new URL(origin + `/online-store/product${id}`);
             console.log(newUrl);
             window.history.pushState({}, '', newUrl);
         }

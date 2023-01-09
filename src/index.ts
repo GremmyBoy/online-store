@@ -7,12 +7,12 @@ import { productPage } from './components/productPage';
 import { LibManifestPlugin } from 'webpack';
 
 const handleLocation = () => {
-    const path = window.location.pathname.split('/');
-    const newPath = path[path.length - 1];
+    const path = window.location.pathname;
     console.log(path, 'path');
-    console.log(newPath, 'newPath');
+    console.log(window.location.pathname, 'window.location.pathname');
+    console.log(window.location.href, 'window.location.href');
 
-    if (newPath === '/' || newPath === '') {
+    if (path === '/online-store/' || path === '/online-store') {
         const main = document.querySelector('main');
         if (main) main.innerHTML = '';
         createSorting();
@@ -23,11 +23,11 @@ const handleLocation = () => {
         cartIco?.addEventListener('click', () => {
             cart.openCart();
         });
-    } else if (newPath === 'cart') {
+    } else if (path === '/online-store/cart') {
         cart.checkCart();
         cart.openCart();
-    } else if (newPath.includes('product')) {
-        const id: number = +newPath.slice(7);
+    } else if (path.includes('/online-store/product')) {
+        const id: number = +path.slice(21);
 
         if (id >= 1 && id <= 100) {
             productPage.openProductPage(id);
@@ -40,19 +40,10 @@ const handleLocation = () => {
         } else {
             create404();
         }
-    } else {
-        console.log('error');
+    } else if (path.includes('/online-store')) {
         create404();
     }
 };
 
-// const route = (event: Event) => {
-//     event = event || window.event;
-//     event.preventDefault();
-//     window.history.pushState({}, '', (event.target as HTMLAnchorElement).href);
-//     handleLocation();
-// };
-
 window.onpopstate = handleLocation;
-// (window as any).route = route;
 handleLocation();

@@ -33,13 +33,12 @@ class Cart {
     };
 
     public changeRouteToCart = () => {
-        const path = window.location.pathname.split('/');
-        const newPath = path[path.length - 1];
-        if (newPath !== 'cart') {
-            const { origin, pathname } = new URL(window.location.href);
-            console.log(origin, pathname);
+        const path = window.location.pathname;
+        if (path !== '/online-store/cart') {
+            const { origin } = new URL(window.location.href);
+            console.log(origin);
 
-            const newUrl = new URL(origin + `${pathname}cart`);
+            const newUrl = new URL(origin + `/online-store/cart`);
             console.log(newUrl);
             window.history.pushState({}, '', newUrl);
         }
