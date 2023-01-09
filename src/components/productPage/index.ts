@@ -5,9 +5,16 @@ import { modal } from '../cart/modal-window';
 
 class ProductPage {
     openProductPage = (id: number) => {
-        const { origin } = new URL(window.location.href);
-        const newUrl = new URL(origin + `/product${id}`);
-        window.history.pushState({}, '', newUrl);
+        const path = window.location.pathname.split('/');
+        const newPath = path[path.length - 1];
+        if (!newPath.includes('product')) {
+            const { origin, pathname } = new URL(window.location.href);
+            console.log(origin, pathname);
+
+            const newUrl = new URL(origin + `${pathname}product${id}`);
+            console.log(newUrl);
+            window.history.pushState({}, '', newUrl);
+        }
 
         const currentProduct = base.products.find((item) => item.id === id);
 

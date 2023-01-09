@@ -33,9 +33,16 @@ class Cart {
     };
 
     public changeRouteToCart = () => {
-        const { origin } = new URL(window.location.href);
-        const newUrl = new URL(origin + `/cart`);
-        window.history.pushState({}, '', newUrl);
+        const path = window.location.pathname.split('/');
+        const newPath = path[path.length - 1];
+        if (newPath !== 'cart') {
+            const { origin, pathname } = new URL(window.location.href);
+            console.log(origin, pathname);
+
+            const newUrl = new URL(origin + `${pathname}cart`);
+            console.log(newUrl);
+            window.history.pushState({}, '', newUrl);
+        }
     };
 
     public changeTotalPrice = () => {
