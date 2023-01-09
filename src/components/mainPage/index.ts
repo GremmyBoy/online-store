@@ -25,7 +25,7 @@ console.log(origin, pathname);
 const main = document.querySelector('main');
 let filteredArray: product[];
 let finedArray: (product | undefined)[] = [];
-let resultArr: (product | undefined)[] = [];
+export let resultArr: (product | undefined)[] = [];
 resultArr = base.products;
 filteredArray = base.products;
 
@@ -217,7 +217,115 @@ export const createGoodsCards = (base: product[] | (product | undefined)[]) => {
     searchInputBlock.append(countGoods);
 };
 
-const sortFunctionUp = (
+export const filterGoods = () => {
+    const category = [
+        ...document.querySelectorAll('.category__list input:checked'),
+    ].map((n: Element) => (n as HTMLInputElement).value);
+
+    const brand = [
+        ...document.querySelectorAll('.brand__list input:checked'),
+    ].map((v: Element) => (v as HTMLInputElement).value);
+
+
+    const priceMin = (<HTMLInputElement>(
+        document.querySelector('.price-min')
+    )).value;
+
+    const priceMax = (<HTMLInputElement>(
+        document.querySelector('.price-max')
+    )).value;
+
+    const stockMin = (<HTMLInputElement>(
+        document.querySelector('.stock-min')
+    )).value;
+
+    const stockMax = (<HTMLInputElement>(
+        document.querySelector('.stock-max')
+    )).value;
+
+    if (
+        category.length === 0 &&
+        brand.length === 0 &&
+        +priceMin === 10 &&
+        +priceMin === 10 &&
+        +priceMax === 1749 &&
+        +stockMin === 2 &&
+        +stockMax === 150
+    ) {
+        filteredArray = base.products;
+    } else {
+        filteredArray = (base.products as product[]).filter(
+            (n: product) => {
+                return (
+                    (!category.length || category.includes(n.category)) &&
+                    (!brand.length || brand.includes(n.brand)) &&
+                    (!priceMin || +priceMin <= n.price) &&
+                    (!priceMax || +priceMax >= n.price) &&
+                    (!stockMin || +stockMin <= n.stock) &&
+                    (!stockMax || +stockMax >= n.stock)
+                );
+            }
+        );
+    }
+
+    if (
+        resultArr.length === 0 &&
+        finedArray.length === 0 &&
+        filteredArray.length === 0
+    ) {
+        resultArr = [];
+    } else if (finedArray.length !== 0) {
+        resultArr = finedArray.filter(function (v) {
+            if (v) {
+                return filteredArray.some(function (v2) {
+                    return v.id == v2.id;
+                });
+            }
+        });
+    } else {
+        resultArr = filteredArray;
+    }
+
+    if (category.length !== 0) {
+        newUrl.searchParams.set('category', `${category}`);
+        window.history.pushState({}, '', newUrl);
+    }
+    else {
+        newUrl.searchParams.delete('category');
+        window.history.pushState({}, '', newUrl);
+    }
+
+    if (brand.length !== 0) {
+        newUrl.searchParams.set('brand', `${brand}`);
+        window.history.pushState({}, '', newUrl);
+    }
+    else {
+        newUrl.searchParams.delete('brand');
+        window.history.pushState({}, '', newUrl);
+    }
+
+    if (+priceMin > 10 || +priceMax < 1749) {
+        newUrl.searchParams.set('price', `${priceMin}↕${priceMax}`);
+        window.history.pushState({}, '', newUrl);
+    }
+    else {
+        newUrl.searchParams.delete('price');
+        window.history.pushState({}, '', newUrl);
+    }
+
+    if (+stockMin > 2 || +stockMax < 150) {
+        newUrl.searchParams.set('stock', `${stockMin}↕${stockMax}`);
+        window.history.pushState({}, '', newUrl);
+    }
+    else {
+        newUrl.searchParams.delete('stock');
+        window.history.pushState({}, '', newUrl);
+    }
+
+    createGoodsCards(resultArr);
+};
+
+export const sortFunctionUp = (
     arr: product[] | (product | undefined)[],
     sorter: string
 ) => {
@@ -229,7 +337,7 @@ const sortFunctionUp = (
     });
 };
 
-const sortFunctionDown = (
+export const sortFunctionDown = (
     arr: product[] | (product | undefined)[],
     sorter: string
 ) => {
@@ -241,7 +349,7 @@ const sortFunctionDown = (
     });
 };
 
-export const categoryFilter = (base: product[]) => {
+const categoryFilter = (base: product[]) => {
     const arr: string[] = [];
     base.forEach((product: product) => {
         arr.push(product.category);
@@ -250,7 +358,7 @@ export const categoryFilter = (base: product[]) => {
     return [...categorySet];
 };
 
-export const brandFilter = (base: product[]) => {
+const brandFilter = (base: product[]) => {
     const arr: string[] = [];
     base.forEach((product: product) => {
         arr.push(product.brand);
@@ -258,6 +366,51 @@ export const brandFilter = (base: product[]) => {
     const brandSet = new Set(arr);
     return [...brandSet];
 };
+
+export const searchFunc = () => {
+    const val = (<HTMLInputElement>document.querySelector('.search__input')).value.trim();
+    const reg = new RegExp(val, 'gi');
+    if (val !== '') {
+        newUrl.searchParams.set('search', `${val}`);
+        window.history.pushState({}, '', newUrl);
+        finedArray = [];
+        base.products.forEach((product: product) => {
+            if (
+                product.brand.search(reg) !== -1 ||
+                product.category.search(reg) !== -1 ||
+                product.description.search(reg) !== -1 ||
+                product.title.search(reg) !== -1 ||
+                (product.price + '').search(reg) !== -1 ||
+                (product.rating + '').search(reg) !== -1 ||
+                (product.discountPercentage + '').search(reg) !== -1
+            ) {
+                finedArray.push(product);
+            }
+        });
+
+        if (finedArray.length !== 0) {
+            resultArr = finedArray.filter(function (v) {
+                if (v) {
+                    return filteredArray.some(function (v2) {
+                        return v.id == v2.id;
+                    });
+                }
+            });
+        } else if (val.length !== 0) {
+            resultArr = [];
+        } else {
+            resultArr = finedArray;
+        }
+        createGoodsCards(resultArr);
+    } else {
+        newUrl.searchParams.delete('search');
+        window.history.pushState({}, '', newUrl);
+        finedArray = [];
+        resultArr = filteredArray;
+        createGoodsCards(resultArr);
+    }
+};
+
 
 // add filter and sorting
 
@@ -275,48 +428,8 @@ export const createSorting = () => {
     searchInput.setAttribute('placeholder', 'Search...');
     searchFormBlock.append(searchInput);
 
-    searchInput.addEventListener('input', function () {
-        const val = this.value.trim();
-        const reg = new RegExp(val, 'gi');
-        if (val !== '') {
-            newUrl.searchParams.set('search', `${val}`);
-            window.history.pushState({}, '', newUrl);
-            finedArray = [];
-            base.products.forEach((product: product) => {
-                if (
-                    product.brand.search(reg) !== -1 ||
-                    product.category.search(reg) !== -1 ||
-                    product.description.search(reg) !== -1 ||
-                    product.title.search(reg) !== -1 ||
-                    (product.price + '').search(reg) !== -1 ||
-                    (product.rating + '').search(reg) !== -1 ||
-                    (product.discountPercentage + '').search(reg) !== -1
-                ) {
-                    finedArray.push(product);
-                }
-            });
-
-            if (finedArray.length !== 0) {
-                resultArr = finedArray.filter(function (v) {
-                    if (v) {
-                        return filteredArray.some(function (v2) {
-                            return v.id == v2.id;
-                        });
-                    }
-                });
-            } else if (val.length !== 0) {
-                resultArr = [];
-            } else {
-                resultArr = finedArray;
-            }
-            createGoodsCards(resultArr);
-        } else {
-            newUrl.searchParams.delete('search');
-            window.history.pushState({}, '', newUrl);
-            finedArray = [];
-            resultArr = filteredArray;
-            createGoodsCards(resultArr);
-        }
+    searchInput.addEventListener('input', () => {
+        return searchFunc();
     });
 
     const sortBlock = document.createElement('div');
@@ -325,6 +438,7 @@ export const createSorting = () => {
 
     for (let i = 0; i < 4; i++) {
         const sortButton = document.createElement('button');
+        sortButton.setAttribute('id', `sortbutton${i + 1}`);
         sortButton.classList.add('sort__button');
         sortBlock.append(sortButton);
     }
@@ -386,6 +500,7 @@ export const createSorting = () => {
         categoryList.append(categoryItem);
 
         const categoryInput = document.createElement('input');
+        categoryInput.classList.add('category-input');
         categoryInput.setAttribute('type', 'checkbox');
         categoryInput.setAttribute('id', `${item}`);
         categoryInput.setAttribute('value', `${item}`);
@@ -417,6 +532,7 @@ export const createSorting = () => {
         brandList.append(brandItem);
 
         const brandInput = document.createElement('input');
+        brandInput.classList.add('brand-input');
         brandInput.setAttribute('type', 'checkbox');
         brandInput.setAttribute('id', `${item}`);
         brandInput.setAttribute('value', `${item}`);
@@ -582,153 +698,10 @@ export const createSorting = () => {
 
     // create filter Function
 
-    const filterGoods = () => {
-        const category = [
-            ...document.querySelectorAll('.category__list input:checked'),
-        ].map((n: Element) => (n as HTMLInputElement).value);
 
-        const brand = [
-            ...document.querySelectorAll('.brand__list input:checked'),
-        ].map((v: Element) => (v as HTMLInputElement).value);
-
-
-        const priceMin = (<HTMLInputElement>(
-            document.querySelector('.price-min')
-        )).value;
-
-        const priceMax = (<HTMLInputElement>(
-            document.querySelector('.price-max')
-        )).value;
-
-        const stockMin = (<HTMLInputElement>(
-            document.querySelector('.stock-min')
-        )).value;
-
-        const stockMax = (<HTMLInputElement>(
-            document.querySelector('.stock-max')
-        )).value;
-
-        if (
-            category.length === 0 &&
-            brand.length === 0 &&
-            +priceMin === 10 &&
-            +priceMin === 10 &&
-            +priceMax === 1749 &&
-            +stockMin === 2 &&
-            +stockMax === 150
-        ) {
-            filteredArray = base.products;
-        } else {
-            filteredArray = (base.products as product[]).filter(
-                (n: product) => {
-                    return (
-                        (!category.length || category.includes(n.category)) &&
-                        (!brand.length || brand.includes(n.brand)) &&
-                        (!priceMin || +priceMin <= n.price) &&
-                        (!priceMax || +priceMax >= n.price) &&
-                        (!stockMin || +stockMin <= n.stock) &&
-                        (!stockMax || +stockMax >= n.stock)
-                    );
-                }
-            );
-        }
-
-        if (
-            resultArr.length === 0 &&
-            finedArray.length === 0 &&
-            filteredArray.length === 0
-        ) {
-            resultArr = [];
-        } else if (finedArray.length !== 0) {
-            resultArr = finedArray.filter(function (v) {
-                if (v) {
-                    return filteredArray.some(function (v2) {
-                        return v.id == v2.id;
-                    });
-                }
-            });
-        } else {
-            resultArr = filteredArray;
-        }
-
-        if (category.length !== 0) {
-            newUrl.searchParams.set('category', `${category}`);
-            window.history.pushState({}, '', newUrl);
-        }
-        else {
-            newUrl.searchParams.delete('category');
-            window.history.pushState({}, '', newUrl);
-        }
-
-        if (brand.length !== 0) {
-            newUrl.searchParams.set('brand', `${brand}`);
-            window.history.pushState({}, '', newUrl);
-        }
-        else {
-            newUrl.searchParams.delete('brand');
-            window.history.pushState({}, '', newUrl);
-        }
-
-        if (+priceMin > 10 || +priceMax < 1749) {
-            newUrl.searchParams.set('price', `${priceMin}↕${priceMax}`);
-            window.history.pushState({}, '', newUrl);
-        }
-        else {
-            newUrl.searchParams.delete('price');
-            window.history.pushState({}, '', newUrl);
-        }
-
-        if (+stockMin > 2 || +stockMax < 150) {
-            newUrl.searchParams.set('stock', `${stockMin}↕${stockMax}`);
-            window.history.pushState({}, '', newUrl);
-        }
-        else {
-            newUrl.searchParams.delete('stock');
-            window.history.pushState({}, '', newUrl);
-        }
-
-        createGoodsCards(resultArr);
-    };
     filterBlock.addEventListener('input', () => {
-        // if (e?.target as HTMLInputElement && e?.target !== null && e !== null && e.currentTarget !== null && e.currentTarget as HTMLDivElement) {
-        //     e.preventDefault();
-        //     const { origin } = new URL(window.location.href);
-        //     console.log(origin);
-        //     const catVal = (<HTMLDivElement>e.target).parentNode?.parentNode;
-        //     const idVal = (<HTMLDivElement>catVal).id;
-        //     console.log(idVal);
-        //     const val = (<HTMLInputElement>e.target).value;
-
-        //     const priceMin = (<HTMLInputElement>(
-        //         document.querySelector('.price-min')
-        //     )).value;
-        //     console.log(`input=${priceMin}`);
-
-        //     const priceMax = (<HTMLInputElement>(
-        //         document.querySelector('.price-max')
-        //     )).value;
-        //     console.log(priceMax, 'priceMax');
-        //     let newUrl = new URL(origin + `?${idVal}=${val}`);
-
-        //     if ((<HTMLInputElement>e.target).classList.contains('price-min') || (<HTMLInputElement>e.target).classList.contains('price-max')) {
-        //         newUrl = new URL(origin + `?${idVal}=${priceMin}↕${priceMax}`);
-        //     }
-
-        //     const stockMin = (<HTMLInputElement>(
-        //         document.querySelector('.stock-min')
-        //     )).value;
-
-        //     const stockMax = (<HTMLInputElement>(
-        //         document.querySelector('.stock-max')
-        //     )).value;
-
-        //     if ((<HTMLInputElement>e.target).classList.contains('stock-min') || (<HTMLInputElement>e.target).classList.contains('stock-max')) {
-        //         newUrl = new URL(origin + `?${idVal}=${stockMin}↕${stockMax}`);
-        //     }
-        //     console.log(newUrl);
-        //     window.history.pushState({}, '', newUrl);
-        // }
-
         return filterGoods();
     });
 };
+
+
