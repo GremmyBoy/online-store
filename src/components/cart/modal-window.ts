@@ -1,6 +1,7 @@
 import { cart } from '.';
 import { createSorting, createGoodsCards } from '../mainPage';
 import { base } from '../goodsBase';
+import { promo } from './promo';
 
 const main = document.querySelector('main');
 
@@ -223,6 +224,7 @@ class ModalWindow {
                 if (modal) {
                     modal.innerHTML = 'Thanks for your order!';
                     cart.cleanCart();
+                    promo.cleanPromo();
 
                     setTimeout(() => {
                         this.closeModalWindow();
