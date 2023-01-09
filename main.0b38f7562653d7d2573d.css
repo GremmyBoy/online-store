@@ -913,6 +913,12 @@ input[type='email'] {
   height: 22px;
 }
 
+.card__number img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 
   @media (max-width: 800px) {
     .shopping-cart {
