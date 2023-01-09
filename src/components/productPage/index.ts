@@ -6,11 +6,11 @@ import { modal } from '../cart/modal-window';
 class ProductPage {
     openProductPage = (id: number) => {
         const path = window.location.pathname;
-        if (!path.includes('/online-store/product')) {
+        if (!path.includes('/product')) {
             const { origin } = new URL(window.location.href);
             console.log(origin);
 
-            const newUrl = new URL(origin + `/online-store/product${id}`);
+            const newUrl = new URL(origin + `/product${id}`);
             console.log(newUrl);
             window.history.pushState({}, '', newUrl);
         }

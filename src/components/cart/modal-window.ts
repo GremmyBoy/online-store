@@ -132,13 +132,16 @@ class ModalWindow {
 
             if (cardImg instanceof HTMLImageElement) {
                 if (value[0] === '4') {
-                    cardImg.src = '../assets/visa.png';
+                    cardImg.src =
+                        'https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png';
                 } else if (value[0] === '5') {
-                    cardImg.src = '../assets/master.png';
+                    cardImg.src =
+                        'https://www.mastercard.hu/content/dam/public/mastercardcom/eu/hu/images/mc-logo-52.svg';
                 } else if (value[0] === '6') {
-                    cardImg.src = '../assets/union.png';
+                    cardImg.src =
+                        'https://m.unionpayintl.com/imp_file/global/wap/en/static/images/logo.png';
                 } else {
-                    cardImg.src = '../assets/card.png';
+                    cardImg.src = './assets/card.png';
                 }
             }
 

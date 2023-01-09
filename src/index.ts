@@ -12,7 +12,7 @@ const handleLocation = () => {
     console.log(window.location.pathname, 'window.location.pathname');
     console.log(window.location.href, 'window.location.href');
 
-    if (path === '/online-store/' || path === '/online-store') {
+    if (path === '/' || path === '') {
         const main = document.querySelector('main');
         if (main) main.innerHTML = '';
         createSorting();
@@ -23,11 +23,11 @@ const handleLocation = () => {
         cartIco?.addEventListener('click', () => {
             cart.openCart();
         });
-    } else if (path === '/online-store/cart') {
+    } else if (path === '/cart') {
         cart.checkCart();
         cart.openCart();
-    } else if (path.includes('/online-store/product')) {
-        const id: number = +path.slice(21);
+    } else if (path.includes('/product')) {
+        const id: number = +path.slice(8);
 
         if (id >= 1 && id <= 100) {
             productPage.openProductPage(id);
@@ -40,7 +40,7 @@ const handleLocation = () => {
         } else {
             create404();
         }
-    } else if (path.includes('/online-store')) {
+    } else {
         create404();
     }
 };
